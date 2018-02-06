@@ -16,12 +16,17 @@ public class testMergeMap {
         Collection<Integer> list = CollectOperator.createOnes(4);
         System.out.println(list);
 
+        list = CollectOperator.createIntsWithDefaultValue(10,5);
+        System.out.println(list);
+
         Collection<Integer> list1 = CollectOperator.createIntsWithRange(10);
         System.out.println(list1);
 
         Collection<Integer> list2 = CollectOperator.createIntsWithRange(0,2,10);
         System.out.println(list2);
 
+        System.out.println(CollectOperator.plus(list2,10));
+        System.out.println(CollectOperator.plus(list2,-2));
 
         map = CollectOperator.mergeToIndexMap(values);
         System.out.println(map);

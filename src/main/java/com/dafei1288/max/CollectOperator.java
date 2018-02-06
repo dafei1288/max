@@ -3,7 +3,6 @@ package com.dafei1288.max;
 
 
 import com.dafei1288.max.functor.NaturalSupplier;
-import com.dafei1288.max.functor.SameNumberSupplier;
 
 
 import java.util.*;
@@ -82,7 +81,15 @@ public class CollectOperator {
     public static Collection<Integer> plus(Collection<Integer> list,Integer value){
         return list.stream().map(it->it+value).collect(Collectors.toList());
     }
-
+    /**
+     * 将两个集合，合并成字典，字典数量为键集合的数量
+     * @param key
+     *  作为键
+     * @param value
+     *  作为值
+     * @param fillEmpty
+     *  是否以空值填充键队列
+     * */
     public static <K,V> Map<K,V> mergeToMap(Collection<K> key,Collection<V> value,Boolean fillEmpty){
         HashMap<K,V> mapper = new HashMap<>();
         Object[] ka = key.toArray();
@@ -100,38 +107,87 @@ public class CollectOperator {
         return mapper;
     }
 
+    /**
+     * 将两个集合，合并成字典，字典数量为键，值两个队列的最小值
+     * @param key
+     *  作为键
+     * @param value
+     *  作为值
+     * */
     public static <K,V> Map<K,V> mergeToMap(Collection<K> key,Collection<V> value){
         return mergeToMap(key,value,false);
     }
+
+    /**
+     * 将两个集合，合并成字典，字典数量为键集合的数量，没有值以空值代替
+     * @param key
+     *  作为键
+     * @param value
+     *  作为值
+     * */
     public static <K,V> Map<K,V> mergeToMapWithAllKeys(Collection<K> key,Collection<V> value){
         return mergeToMap(key,value,true);
     }
 
-
+    /**
+     * 为集合创建自然数索引
+     * */
     public static <V> Map<Integer,V> mergeToIndexMap(Collection<V> values){
         Collection<Integer> keys = createIntsWithRange(values.size());
         return mergeToMapWithAllKeys(keys,values);
     }
 
-
+    /**
+     * 创建自然数集合，从1开始，count个
+     * @param count
+     *  计数器
+     * */
     public static Collection<Integer> createIntsWithRange(Integer count){
         return createIntsWithRange(0,1,count);
-//        return null;
     }
-
+    /**
+     * 创建整数列表
+     *
+     * 以from值开始，按照步长累加，创建count个
+     * @param from
+     *  起始数据
+     * @param setp
+     *  步长
+     * @param count
+     *  计数器
+     *
+     * */
     public static Collection<Integer> createIntsWithRange(Integer from,Integer setp,Integer count){
         Stream<Integer> natural = Stream.generate(new NaturalSupplier(from,setp));
         return natural.limit(count).collect(Collectors.toList());
     }
 
+    /**
+     * 创建以0填充的集合，参数为个数
+     * @param count
+     *  计数器
+     * */
     public static Collection<Integer> createZeros(Integer count){
-        return createIntsWithDefaultValue(count,0);
+        return createIntsWithRange(0,0,count);
     }
+
+    /**
+     * 创建以1填充的集合，参数为个数
+     * @param count
+     *  计数器
+     * */
     public static Collection<Integer> createOnes(Integer count){
-        return createIntsWithDefaultValue(count,1);
+        return createIntsWithRange(1,0,count);
     }
+
+    /**
+     * 创建以默认值填充的集合，参数为个数
+     * @param count
+     *  计数器
+     * @param value
+     *  默认值
+     * */
     public static Collection<Integer> createIntsWithDefaultValue(Integer count,Integer value){
-        Stream<Integer> sames = Stream.generate(new SameNumberSupplier(value));
-        return sames.limit(count).collect(Collectors.toList());
+        return createIntsWithRange(value,0,count);
     }
 }
