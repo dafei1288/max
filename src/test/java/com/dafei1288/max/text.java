@@ -1,5 +1,7 @@
 package com.dafei1288.max;
 
+import com.dafei1288.max.functor.Functors;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +17,10 @@ public class text {
         List<Object> G71 = Arrays.asList("1111", 2222, "France", "Germany", null, "U.K.","Canada");
         //String G7Countries = G7.stream().map(x -> x.toUpperCase()).collect(Collectors.joining(", "));
         Collection<String> g11 = (Collection<String>) CollectOperator.toUpperCaseExcludeNull(G71);
-        System.out.print(g11);
+        System.out.println(g11);
+
+
+        G7.stream().map(Functors.LOWER_CASE_FUNCTOR).forEach(System.out::println);
+
     }
 }
