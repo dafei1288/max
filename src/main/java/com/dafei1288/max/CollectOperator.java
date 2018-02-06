@@ -1,9 +1,7 @@
 package com.dafei1288.max;
 
-
-
 import com.dafei1288.max.functor.NaturalSupplier;
-
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,9 +76,39 @@ public class CollectOperator {
         return toLowerCase(list,"");
     }
 
-    public static Collection<Integer> plus(Collection<Integer> list,Integer value){
-        return list.stream().map(it->it+value).collect(Collectors.toList());
+    public static <T extends Number> Collection<Double> plus(Collection<? extends Number> list,T value){
+        return list.stream().map(it-> {
+            Optional t1  = Optional.ofNullable(it);
+            Optional t2  = Optional.ofNullable(value);
+            Double td1 = Double.valueOf(t1.orElse(0).toString());
+            Double td2 = Double.valueOf(t2.orElse(0).toString());
+            return td1+td2;
+        }).collect(Collectors.toList());
     }
+
+    public static Collection<Double> plus(Collection<? extends Number> lefts,Collection<? extends Number> rights){
+        return plus(lefts,rights,false,0,0);
+    }
+
+    public static <T extends Number> Collection<Double> plus(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T rightDefaultValue , T leftDefaultValue){
+        List<Double> temp = new ArrayList<>();
+        int leftSize = lefts.size();
+        int rightSize = rights.size();
+        int min = NumberUtils.min(leftSize,rightSize);
+        int max = NumberUtils.min(leftSize,rightSize);
+        int setps = overflow ? max : min;
+        for(int i = 0; i < setps ; i++){
+            Optional left  = Optional.ofNullable(lefts.toArray()[i]);
+            Optional right  = Optional.ofNullable(rights.toArray()[i]);
+            Double leftd = Double.valueOf(left.orElse(0).toString());
+            Double rightd = Double.valueOf(right.orElse(0).toString());
+            temp.add(leftd+rightd);
+        }
+
+        return temp;
+    }
+
+
     /**
      * 将两个集合，合并成字典，字典数量为键集合的数量
      * @param key

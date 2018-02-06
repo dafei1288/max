@@ -25,11 +25,17 @@ public class testMergeMap {
         Collection<Integer> list2 = CollectOperator.createIntsWithRange(0,2,10);
         System.out.println(list2);
 
-        System.out.println(CollectOperator.plus(list2,10));
+        System.out.println(CollectOperator.plus(list2,10.0));
+        Collection<Double> t = CollectOperator.plus(list2,-2);
+        t.stream().forEach(System.out::println);
         System.out.println(CollectOperator.plus(list2,-2));
 
         map = CollectOperator.mergeToIndexMap(values);
         System.out.println(map);
+
+        t = CollectOperator.plus(CollectOperator.createIntsWithRange(10),CollectOperator.createIntsWithRange(0,2,15));
+        System.out.println(t);
+        t.stream().forEach(System.out::println);
 
     }
 }
