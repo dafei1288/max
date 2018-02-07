@@ -17,7 +17,6 @@
         //Map<Integer,String> map = CollectOperator.mergeToIndexMap(values);
 ``` 
 输出结果 `{1=USA, 2=Japan, 3=France, 4=Germany, 5=Italy, 6=U.K., 7=Canada}` 
-
 1. 将两个序列，对位匹配成键值对
 ```
         //创建键序列
@@ -35,5 +34,11 @@
 - [ ] 集合其他运算操作
 - [ ] 创建矩阵
 - [ ] 封装数据类型
+
+# links
+
+[码云](https://gitee.com/dafei1288/max)
+
+[github](https://github.com/dafei1288/max)
 
 (TBD...)
