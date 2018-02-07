@@ -90,18 +90,18 @@ public class CollectOperator {
         return plus(lefts,rights,false,0,0);
     }
 
-    public static <T extends Number> Collection<Double> plus(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T rightDefaultValue , T leftDefaultValue){
+    public static <T extends Number> Collection<Double> plus(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T leftDefaultValue , T rightDefaultValue){
         List<Double> temp = new ArrayList<>();
         int leftSize = lefts.size();
         int rightSize = rights.size();
         int min = NumberUtils.min(leftSize,rightSize);
-        int max = NumberUtils.min(leftSize,rightSize);
+        int max = NumberUtils.max(leftSize,rightSize);
         int setps = overflow ? max : min;
         for(int i = 0; i < setps ; i++){
-            Optional left  = Optional.ofNullable(lefts.toArray()[i]);
-            Optional right  = Optional.ofNullable(rights.toArray()[i]);
-            Double leftd = Double.valueOf(left.orElse(0).toString());
-            Double rightd = Double.valueOf(right.orElse(0).toString());
+            Optional left  = Optional.ofNullable(i<lefts.size()?lefts.toArray()[i]:null);
+            Optional right  = Optional.ofNullable(i<rights.size()?rights.toArray()[i]:null);
+            Double leftd = Double.valueOf(left.orElse(leftDefaultValue).toString());
+            Double rightd = Double.valueOf(right.orElse(rightDefaultValue).toString());
             temp.add(leftd+rightd);
         }
 
