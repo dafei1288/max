@@ -20,4 +20,36 @@ dependencies {
 
 
 
+/*
+https://www.cnblogs.com/jiaoyiping/p/7045965.html
 
+gradle publishMavenPublicationToMavenRepository
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+            //若是war包，就写components.web,若是jar包，就写components.java
+            from components.web
+        }
+    }
+    repositories {
+        maven {
+
+            if (project.version.endsWith('-SNAPSHOT')) {
+                url = "快照版本的nexus仓库地址"
+            } else {
+                url = "release版本的仓库地址"
+            }
+
+            credentials {
+                username 'nexus仓库用户名'
+                password 'nexus仓库密码'
+            }
+        }
+    }
+}
+*/

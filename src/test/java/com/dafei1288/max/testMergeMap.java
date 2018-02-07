@@ -40,5 +40,8 @@ public class testMergeMap {
         System.out.println(t);
         //t.stream().forEach(System.out::println);
 
+        t = CollectOperator.createRandoms(10);
+        System.out.println(t);
+
     }
 }

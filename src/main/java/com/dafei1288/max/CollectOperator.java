@@ -2,6 +2,7 @@ package com.dafei1288.max;
 
 import com.dafei1288.max.functor.BaseOperator;
 import com.dafei1288.max.functor.NaturalSupplier;
+import com.dafei1288.max.functor.RandomSupplier;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
@@ -269,6 +270,27 @@ public class CollectOperator {
      * */
     public static Collection<Integer> createOnes(Integer count){
         return createIntsWithRange(1,0,count);
+    }
+
+
+    /**
+     * 创建随机数集合，参数为个数
+     * @param count
+     *  计数器
+     * */
+    public static Collection<Double> createRandoms(Integer count){
+        Stream<Double> natural = Stream.generate(RandomSupplier.RANDOM_DOUBLE_SEED);
+        return natural.limit(count).collect(Collectors.toList());
+    }
+
+    /**
+     * 创建布尔值集合，参数为个数
+     * @param count
+     *  计数器
+     * */
+    public static Collection<Boolean> createBooleans(Integer count){
+        Stream<Boolean> natural = Stream.generate(RandomSupplier.RANDOM_BOOLEAN_SEED);
+        return natural.limit(count).collect(Collectors.toList());
     }
 
     /**
