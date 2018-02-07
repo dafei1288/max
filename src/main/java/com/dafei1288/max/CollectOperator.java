@@ -1,5 +1,6 @@
 package com.dafei1288.max;
 
+import com.dafei1288.max.functor.BaseOperator;
 import com.dafei1288.max.functor.NaturalSupplier;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -77,20 +78,77 @@ public class CollectOperator {
     }
 
     public static <T extends Number> Collection<Double> plus(Collection<? extends Number> list,T value){
+        return twoElementsOperation(list,value,BaseOperator.PLUS);
+    }
+
+
+    public static <T extends Number> Collection<Double> minus(Collection<? extends Number> list,T value){
+        return twoElementsOperation(list,value,BaseOperator.MINUS);
+    }
+
+    public static <T extends Number> Collection<Double> mulit(Collection<? extends Number> list,T value){
+        return twoElementsOperation(list,value,BaseOperator.MULTI);
+    }
+
+    public static <T extends Number> Collection<Double> divide(Collection<? extends Number> list,T value){
+        return twoElementsOperation(list,value,BaseOperator.DIVIDE);
+    }
+
+    public static <T extends Number> Collection<Double> twoElementsOperation(Collection<? extends Number> list,T value,BaseOperator operator){
         return list.stream().map(it-> {
             Optional t1  = Optional.ofNullable(it);
             Optional t2  = Optional.ofNullable(value);
             Double td1 = Double.valueOf(t1.orElse(0).toString());
             Double td2 = Double.valueOf(t2.orElse(0).toString());
-            return td1+td2;
+            switch (operator){
+                case PLUS: return td1+td2;
+                case MINUS: return td1-td2;
+                case MULTI: return td1*td2;
+                case DIVIDE: return td1/td2;
+                default: return td1+td2;
+            }
+
         }).collect(Collectors.toList());
     }
+
+
 
     public static Collection<Double> plus(Collection<? extends Number> lefts,Collection<? extends Number> rights){
         return plus(lefts,rights,false,0,0);
     }
 
     public static <T extends Number> Collection<Double> plus(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T leftDefaultValue , T rightDefaultValue){
+        return twoSetsOperation(lefts,rights,false,0,0,BaseOperator.PLUS);
+    }
+
+
+    public static Collection<Double> minus(Collection<? extends Number> lefts,Collection<? extends Number> rights){
+        return minus(lefts,rights,false,0,0);
+    }
+
+    public static <T extends Number> Collection<Double> minus(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T leftDefaultValue , T rightDefaultValue){
+        return twoSetsOperation(lefts,rights,false,0,0,BaseOperator.MINUS);
+    }
+
+
+    public static Collection<Double> mulit(Collection<? extends Number> lefts,Collection<? extends Number> rights){
+        return mulit(lefts,rights,false,0,0);
+    }
+
+    public static <T extends Number> Collection<Double> mulit(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T leftDefaultValue , T rightDefaultValue){
+        return twoSetsOperation(lefts,rights,false,0,0,BaseOperator.MULTI);
+    }
+
+
+    public static Collection<Double> divide(Collection<? extends Number> lefts,Collection<? extends Number> rights){
+        return divide(lefts,rights,false,0,0);
+    }
+
+    public static <T extends Number> Collection<Double> divide(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T leftDefaultValue , T rightDefaultValue){
+        return twoSetsOperation(lefts,rights,false,0,0,BaseOperator.DIVIDE);
+    }
+
+    public static <T extends Number> Collection<Double> twoSetsOperation(Collection<? extends Number> lefts,Collection<? extends Number> rights,Boolean overflow,T leftDefaultValue , T rightDefaultValue,BaseOperator operator){
         List<Double> temp = new ArrayList<>();
         int leftSize = lefts.size();
         int rightSize = rights.size();
@@ -102,13 +160,18 @@ public class CollectOperator {
             Optional right  = Optional.ofNullable(i<rights.size()?rights.toArray()[i]:null);
             Double leftd = Double.valueOf(left.orElse(leftDefaultValue).toString());
             Double rightd = Double.valueOf(right.orElse(rightDefaultValue).toString());
-            temp.add(leftd+rightd);
+            switch (operator){
+                case PLUS:  temp.add(leftd+rightd);break;
+                case MINUS: temp.add(leftd-rightd);break;
+                case MULTI: temp.add(leftd*rightd);break;
+                case DIVIDE: temp.add(leftd/rightd);break;
+                default: break ;
+            }
+
         }
 
         return temp;
     }
-
-
     /**
      * 将两个集合，合并成字典，字典数量为键集合的数量
      * @param key
