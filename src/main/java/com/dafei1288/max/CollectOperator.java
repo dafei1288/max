@@ -303,4 +303,7 @@ public class CollectOperator {
     public static Collection<Integer> createIntsWithDefaultValue(Integer count,Integer value){
         return createIntsWithRange(value,0,count);
     }
+
+
+    //public static Boolean everyOne(Collection<? extends Number> list){}
 }
