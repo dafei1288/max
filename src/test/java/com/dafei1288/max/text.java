@@ -22,5 +22,45 @@ public class text {
 
         G7.stream().map(Functors.LOWER_CASE_FUNCTOR).forEach(System.out::println);
 
+
+        Collection<Integer> evet = CollectOperator.createRandomInts(10);
+        Boolean tag = CollectOperator.everyOne(evet,x -> x >= 10);
+        System.out.println(evet);
+        System.out.println(tag);
+
+        System.out.println();
+
+        evet = CollectOperator.createIntsWithRange(10);
+        tag = CollectOperator.hasOne(evet,x -> x >= 11);
+        System.out.println(evet);
+        System.out.println(tag);
+
+
+        System.out.println();
+
+        evet = CollectOperator.createIntsWithRange(10);
+        Collection<Integer> fixs = CollectOperator.everyFixTo(evet,x -> x >= 5);
+        System.out.println(evet);
+        System.out.println(fixs);
+
+        Collection<String> fixss = CollectOperator.everyFixTo(G7,it -> it.toString().contains("a")||it.toString().contains("A"));
+        System.out.println(G7);
+        System.out.println(fixss);
+
+        fixss = CollectOperator.everyMapTo(G7,it -> it.toLowerCase());
+        System.out.println(G7);
+        System.out.println(fixss);
+
+        String d = CollectOperator.everyMapAndReduceTo(evet,x->x.toString(),(sum,item)->sum + item);
+        System.out.println(d);
+
+        Integer di = CollectOperator.everyReduceTo(evet,(sum,item)->sum + item);
+        System.out.println(di);
+
+        di = CollectOperator.everyFixThenMapAndReduceTo(evet,x->x>5,x->x,(sum,item)->sum + item);
+        System.out.println(di);
+
+        Collection<Integer> fixs1 = CollectOperator.everyFixThenMapTo(evet,x->x>5,x->x+1);
+        System.out.println(fixs1);
     }
 }

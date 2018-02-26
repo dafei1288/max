@@ -13,7 +13,7 @@ stat: logicExpr    # printLogicExpr
 | SEM              # blank
 ;
 
-expr:expr op=('*'|'/') expr      # MulDiv
+expr:expr op=('*'|'/') expr     # MulDiv
 | expr op=('+'|'-') expr        # AddSub
 | IT                            # it
 | INT                           # int
@@ -25,13 +25,13 @@ expr:expr op=('*'|'/') expr      # MulDiv
 
 logicExpr: logicExpr op=('||'|'&&'|'!') logicExpr       # topLevelLogic
 | logicExpr op=('>'|'<'|'=='|'!='|'>='|'<=') logicExpr  # logicexpress
-| expr op=('>'|'<'|'=='|'!='|'>='|'<=') expr            # logicnumber
 | IT op=('>'|'<'|'=='|'!='|'>='|'<=') expr              # itExpr
+| expr op=('>'|'<'|'=='|'!='|'>='|'<=') expr            # logicnumber
+| IT                                                    # assIt
 | TRUE                                                  # true
 | FALSE                                                 # false
 | '(' logicExpr ')'                                     # parentsLogic
 ;
-
 
 
 MUL : '*' ;

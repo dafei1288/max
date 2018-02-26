@@ -196,6 +196,18 @@ public class MaxExprBaseListener implements MaxExprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssIt(MaxExprParser.AssItContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssIt(MaxExprParser.AssItContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTopLevelLogic(MaxExprParser.TopLevelLogicContext ctx) { }
 	/**
 	 * {@inheritDoc}

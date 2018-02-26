@@ -6,6 +6,9 @@ import com.dafei1288.max.functor.RandomSupplier;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -284,6 +287,15 @@ public class CollectOperator {
     }
 
     /**
+     * 创建随机数集合，参数为个数
+     * @param count
+     *  计数器
+     * */
+    public static Collection<Integer> createRandomInts(Integer count){
+        Stream<Integer> natural = Stream.generate(RandomSupplier.RANDOM_INT_SEED);
+        return natural.limit(count).collect(Collectors.toList());
+    }
+    /**
      * 创建布尔值集合，参数为个数
      * @param count
      *  计数器
@@ -305,5 +317,122 @@ public class CollectOperator {
     }
 
 
-    //public static Boolean everyOne(Collection<? extends Number> list){}
+
+    /**
+     * 测试每个元素是否符合表达式
+     * @param list
+     *  操作集合
+     * @param predicate
+     *  表达式 类似 x-> x > 10
+     * */
+    public static <T> Boolean everyOne(Collection<T> list, Predicate<T> predicate){
+////        Boolean temp = Boolean.TRUE;
+//        for(T num:list){
+//            if(predicate.test(num) != tag){
+//                return Boolean.FALSE;
+//            }
+//        }
+        return list.stream().allMatch(predicate);
+    }
+
+    /**
+     * 测试集合内是否包含某个元素
+     * @param list
+     *  操作集合
+     * @param predicate
+     *  表达式 类似 x-> x > 10
+     * */
+    public static <T> Boolean hasOne(Collection<T> list, Predicate<T> predicate){
+        return list.stream().anyMatch(predicate);
+    }
+
+
+    /**
+     * 测试集合内是否包含某个元素
+     * @param list
+     *  操作集合
+     * @param predicate
+     *  表达式 类似 x-> x > 10
+     * */
+    public static <T> Boolean noOne(Collection<T> list, Predicate<T> predicate){
+        return list.stream().noneMatch(predicate);
+    }
+
+
+    /**
+     * 获取符合条件的元素集合
+     * @param list
+     *  操作集合
+     * @param predicate
+     *  表达式 类似 x-> x > 10
+     * */
+    public static <T> Collection<T> everyFixTo(Collection<T> list, Predicate<T> predicate){
+        return list.stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    /**
+     * 将集合内元素转换成其他元素
+     * @param list
+     *  操作集合
+     * @param function
+     *  表达式 类似 it -> it.toLowerCase()
+     * */
+    public static <T,R> Collection<R> everyMapTo(Collection<T> list, Function<T,R> function){
+        return list.stream().map(function).collect(Collectors.toList());
+    }
+
+    /**
+     * 将集合内元素进行汇集操作
+     * @param list
+     *  操作集合
+     * @param accumulator
+     *  汇集算子
+     */
+    public static <T,R> R everyReduceTo(Collection<T> list, BinaryOperator<R> accumulator){
+        return list.stream().map(x->(R)x).reduce(accumulator).get();
+    }
+
+    /**
+     * 将集合内元素映射并进行汇集操作
+     * @param list
+     *  操作集合
+     * @param function
+     *  映射操作
+     * @param accumulator
+     *  汇集算子
+     */
+    public static <T,R> R everyMapAndReduceTo(Collection<T> list, Function<T,R> function, BinaryOperator<R> accumulator){
+        return list.stream().map(function).reduce(accumulator).get();
+    }
+
+
+    /**
+     * 将集合内元素过滤并映射
+     * @param list
+     *  操作集合
+     * @param predicate
+     *  过滤算子
+     * @param function
+     *  映射操作
+     *
+     */
+    public static <T,R> Collection<R> everyFixThenMapTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function){
+        return list.stream().filter(predicate).map(function).collect(Collectors.toList());
+    }
+
+    /**
+     * 将集合内元素过滤并映射并汇集操作
+     * @param list
+     *  操作集合
+     * @param predicate
+     *  过滤算子
+     * @param function
+     *  映射操作
+     * @param accumulator
+     *  汇集算子
+     */
+    public static <T,R> R everyFixThenMapAndReduceTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function, BinaryOperator<R> accumulator){
+        return list.stream().filter(predicate).map(function).reduce(accumulator).get();
+    }
+
 }

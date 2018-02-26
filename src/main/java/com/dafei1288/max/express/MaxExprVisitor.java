@@ -115,6 +115,13 @@ public interface MaxExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitItExpr(MaxExprParser.ItExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code assIt}
+	 * labeled alternative in {@link MaxExprParser#logicExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssIt(MaxExprParser.AssItContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code topLevelLogic}
 	 * labeled alternative in {@link MaxExprParser#logicExpr}.
 	 * @param ctx the parse tree

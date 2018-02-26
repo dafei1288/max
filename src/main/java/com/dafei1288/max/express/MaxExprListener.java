@@ -186,6 +186,18 @@ public interface MaxExprListener extends ParseTreeListener {
 	 */
 	void exitItExpr(MaxExprParser.ItExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code assIt}
+	 * labeled alternative in {@link MaxExprParser#logicExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssIt(MaxExprParser.AssItContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code assIt}
+	 * labeled alternative in {@link MaxExprParser#logicExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssIt(MaxExprParser.AssItContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code topLevelLogic}
 	 * labeled alternative in {@link MaxExprParser#logicExpr}.
 	 * @param ctx the parse tree
