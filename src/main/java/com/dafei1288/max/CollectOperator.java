@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 public class CollectOperator {
     /**
      *  去掉空值，并全部转换成大写字母
+     *  @param list
+     *     操作集合
      * */
     public static Collection<?> toUpperCaseExcludeNull(Collection<?> list){
         return toUpperCase(removeNullElement(list),"");
@@ -24,6 +26,10 @@ public class CollectOperator {
 
     /**
      *  并全部转换成大写字母，空值以默认值代替
+     *  @param list
+     *     操作集合
+     *  @param defaultValue
+     *      默认值
      * */
     public static Collection<?> toUpperCase(Collection<?> list,Object defaultValue){
         return list
@@ -39,6 +45,8 @@ public class CollectOperator {
 
     /**
      *  并全部转换成大写字母，空值以空字符串代替
+     *  @param list
+     *     操作集合
      * */
     public static Collection<?> toUpperCase(Collection<?> list){
         return toUpperCase(list,"");
@@ -46,6 +54,8 @@ public class CollectOperator {
 
     /**
      * 将集合中的空值去掉
+     * @param list
+     *     操作集合
      * */
     public static Collection<?> removeNullElement(Collection<?> list){
         return list.stream().filter(it->it!=null).collect(Collectors.toList());
@@ -53,6 +63,8 @@ public class CollectOperator {
 
     /**
      *  去掉空值，并全部转换成小写字母
+     *  @param list
+     *     操作集合
      * */
     public static Collection<?> toLowerCaseExcludeNull(Collection<?> list){
         return toUpperCase(removeNullElement(list),"");
@@ -61,6 +73,10 @@ public class CollectOperator {
 
     /**
      *  并全部转换成小写字母，空值以默认值代替
+     *  @param list
+     *     操作集合
+     *  @param defaultValue
+     *     默认值
      * */
     public static Collection<?> toLowerCase(Collection<?> list,Object defaultValue){
         return list
@@ -76,6 +92,8 @@ public class CollectOperator {
 
     /**
      *  并全部转换成小写字母，空值以空字符串代替
+     *  @param list
+     *     操作集合
      * */
     public static Collection<?> toLowerCase(Collection<?> list){
         return toLowerCase(list,"");
@@ -323,7 +341,7 @@ public class CollectOperator {
      * @param list
      *  操作集合
      * @param predicate
-     *  表达式 类似 x-> x > 10
+     *  表达式 类似 x-&gt; x &gt; 10
      * */
     public static <T> Boolean everyOne(Collection<T> list, Predicate<T> predicate){
 ////        Boolean temp = Boolean.TRUE;
@@ -340,7 +358,7 @@ public class CollectOperator {
      * @param list
      *  操作集合
      * @param predicate
-     *  表达式 类似 x-> x > 10
+     *  表达式 类似 x-&gt; x &gt; 10
      * */
     public static <T> Boolean hasOne(Collection<T> list, Predicate<T> predicate){
         return list.stream().anyMatch(predicate);
@@ -352,7 +370,7 @@ public class CollectOperator {
      * @param list
      *  操作集合
      * @param predicate
-     *  表达式 类似 x-> x > 10
+     *  表达式 类似 x-&gt; x &gt; 10
      * */
     public static <T> Boolean noOne(Collection<T> list, Predicate<T> predicate){
         return list.stream().noneMatch(predicate);
@@ -364,7 +382,7 @@ public class CollectOperator {
      * @param list
      *  操作集合
      * @param predicate
-     *  表达式 类似 x-> x > 10
+     *  表达式 类似 x-&gt; x &gt; 10
      * */
     public static <T> Collection<T> everyFixTo(Collection<T> list, Predicate<T> predicate){
         return list.stream().filter(predicate).collect(Collectors.toList());
@@ -375,7 +393,7 @@ public class CollectOperator {
      * @param list
      *  操作集合
      * @param function
-     *  表达式 类似 it -> it.toLowerCase()
+     *  表达式 类似 it -&gt; it.toLowerCase()
      * */
     public static <T,R> Collection<R> everyMapTo(Collection<T> list, Function<T,R> function){
         return list.stream().map(function).collect(Collectors.toList());
@@ -430,6 +448,9 @@ public class CollectOperator {
      *  映射操作
      * @param accumulator
      *  汇集算子
+     *
+     * @return
+     *  映射结果
      */
     public static <T,R> R everyFixThenMapAndReduceTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function, BinaryOperator<R> accumulator){
         return list.stream().filter(predicate).map(function).reduce(accumulator).get();

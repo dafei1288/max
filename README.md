@@ -43,9 +43,52 @@
 ```
 输出结果`{10=USA}` 
 
+1.  探测序列内，是否每一个元素都符合表达式
+```
+        Collection<Integer> evet = CollectOperator.createRandomInts(10);
+        Boolean tag = CollectOperator.everyOne(evet,x -> x >= 10);
+```
+同样还有，是否有元素符合要求
+```
+        Collection<Integer> evet = CollectOperator.createRandomInts(10);
+        Boolean tag = CollectOperator.hasOne(evet,x -> x >= 10);
+```
+是否全部不符合要求
+```
+        Collection<Integer> evet = CollectOperator.createRandomInts(10);
+        Boolean tag = CollectOperator.noOne(evet,x -> x >= 10);
+```
+
+1. 过滤出符合条件的元素
+```
+        Collection<Integer> evet = CollectOperator.createIntsWithRange(10);
+        Collection<Integer> fixs = CollectOperator.everyFixTo(evet,x -> x >= 5);
+        //结果：[5,6,7,8,9,10]
+```
+# lambda know how
+
+Java SE 7中已经存在的函数式接口：
+```
+java.lang.Runnable
+java.util.concurrent.Callable
+java.security.PrivilegedAction
+java.util.Comparator
+java.io.FileFilter
+java.beans.PropertyChangeListener
+```
+
+除此之外，Java SE 8中增加了一个新的包：java.util.function，它里面包含了常用的函数式接口，例如：
+`redicate<T>` ——接收`T`对象并返回`boolean` 
+`Consumer<T>`——接收`T`对象，不返回值 
+`Function<T, R>`——接收`T`对象，返回`R`对象
+`Supplier<T>`——提供`T`对象（例如工厂），不接收值
+`UnaryOperator<T>`——接收`T`对象，返回`T`对象
+`BinaryOperator<T>`——接收两个`T`对象，返回`T`对象
+除了上面的这些基本的函数式接口，我们还提供了一些针对原始类型（Primitive type）的特化（Specialization）函数式接口，例如`IntSupplier`和`LongBinaryOperator`。（我们只为`int`、`long`和`double`提供了特化函数式接口，如果需要使用其它原始类型则需要进行类型转换）同样的我们也提供了一些针对多个参数的函数式接口，例如`BiFunction<T, U, R>`，它接收`T`对象和`U`对象，返回`R`对象。
+
 # TODO
 - [x] 集合四则运算运算操作
-- [ ] 关系代数运算
+- [x] 关系代数运算
 - [ ] 封装数据类型
 - [ ] 表达式引擎
 
