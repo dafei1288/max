@@ -30,6 +30,7 @@
         //Map<Integer,String> map = CollectOperator.mergeToIndexMap(values);
 ``` 
 输出结果 `{1=USA, 2=Japan, 3=France, 4=Germany, 5=Italy, 6=U.K., 7=Canada}` 
+
 6. 将两个序列，对位匹配成键值对
 ```
         //创建键序列
@@ -42,6 +43,7 @@
         Map<Integer,String> map = CollectOperator.mergeToMap(keys,values,true);
 ```
 输出结果`{10=USA}` 
+
 7. 探测序列内，是否每一个元素都符合表达式
 ```
         Collection<Integer> evet = CollectOperator.createRandomInts(10);
@@ -57,12 +59,14 @@
         Collection<Integer> evet = CollectOperator.createRandomInts(10);
         Boolean tag = CollectOperator.noOne(evet,x -> x >= 10);
 ``` 
+
 8. 过滤出符合条件的元素
 ```
         Collection<Integer> evet = CollectOperator.createIntsWithRange(10);
         Collection<Integer> fixs = CollectOperator.everyFixTo(evet,x -> x >= 5);
         //结果：[5,6,7,8,9,10]
 ```
+
 # lambda know how
 
 Java SE 7中已经存在的函数式接口：
