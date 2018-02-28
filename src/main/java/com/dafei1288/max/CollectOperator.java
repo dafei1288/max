@@ -7,17 +7,26 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
+/**
+ *
+ * 集合操作工具类
+ * @author dafei1288
+ * @version 0.1
+ *
+ * */
 public class CollectOperator {
     /**
      *  去掉空值，并全部转换成大写字母
      *  @param list
      *     操作集合
+     *
+     *  @return
      * */
     public static Collection<?> toUpperCaseExcludeNull(Collection<?> list){
         return toUpperCase(removeNullElement(list),"");
@@ -30,6 +39,7 @@ public class CollectOperator {
      *     操作集合
      *  @param defaultValue
      *      默认值
+     *  @return
      * */
     public static Collection<?> toUpperCase(Collection<?> list,Object defaultValue){
         return list
@@ -47,6 +57,8 @@ public class CollectOperator {
      *  并全部转换成大写字母，空值以空字符串代替
      *  @param list
      *     操作集合
+     *
+     *  @return
      * */
     public static Collection<?> toUpperCase(Collection<?> list){
         return toUpperCase(list,"");
@@ -56,6 +68,7 @@ public class CollectOperator {
      * 将集合中的空值去掉
      * @param list
      *     操作集合
+     * @return
      * */
     public static Collection<?> removeNullElement(Collection<?> list){
         return list.stream().filter(it->it!=null).collect(Collectors.toList());
@@ -65,6 +78,7 @@ public class CollectOperator {
      *  去掉空值，并全部转换成小写字母
      *  @param list
      *     操作集合
+     *  @return
      * */
     public static Collection<?> toLowerCaseExcludeNull(Collection<?> list){
         return toUpperCase(removeNullElement(list),"");
@@ -77,6 +91,8 @@ public class CollectOperator {
      *     操作集合
      *  @param defaultValue
      *     默认值
+     *
+     *  @return
      * */
     public static Collection<?> toLowerCase(Collection<?> list,Object defaultValue){
         return list
@@ -94,6 +110,7 @@ public class CollectOperator {
      *  并全部转换成小写字母，空值以空字符串代替
      *  @param list
      *     操作集合
+     *  @return
      * */
     public static Collection<?> toLowerCase(Collection<?> list){
         return toLowerCase(list,"");
@@ -202,6 +219,8 @@ public class CollectOperator {
      *  作为值
      * @param fillEmpty
      *  是否以空值填充键队列
+     *
+     *  @return
      * */
     public static <K,V> Map<K,V> mergeToMap(Collection<K> key,Collection<V> value,Boolean fillEmpty){
         HashMap<K,V> mapper = new HashMap<>();
@@ -226,6 +245,8 @@ public class CollectOperator {
      *  作为键
      * @param value
      *  作为值
+     *
+     *  @return
      * */
     public static <K,V> Map<K,V> mergeToMap(Collection<K> key,Collection<V> value){
         return mergeToMap(key,value,false);
@@ -237,6 +258,8 @@ public class CollectOperator {
      *  作为键
      * @param value
      *  作为值
+     *
+     *  @return
      * */
     public static <K,V> Map<K,V> mergeToMapWithAllKeys(Collection<K> key,Collection<V> value){
         return mergeToMap(key,value,true);
@@ -244,6 +267,11 @@ public class CollectOperator {
 
     /**
      * 为集合创建自然数索引
+     *
+     * @param values
+     *  要创建索引的集合
+     *
+     * @return
      * */
     public static <V> Map<Integer,V> mergeToIndexMap(Collection<V> values){
         Collection<Integer> keys = createIntsWithRange(values.size());
@@ -254,6 +282,8 @@ public class CollectOperator {
      * 创建自然数集合，从1开始，count个
      * @param count
      *  计数器
+     *
+     *  @return
      * */
     public static Collection<Integer> createIntsWithRange(Integer count){
         return createIntsWithRange(0,1,count);
@@ -269,6 +299,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
+     * @return
      * */
     public static Collection<Integer> createIntsWithRange(Integer from,Integer setp,Integer count){
         Stream<Integer> natural = Stream.generate(new NaturalSupplier(from,setp));
@@ -279,6 +310,8 @@ public class CollectOperator {
      * 创建以0填充的集合，参数为个数
      * @param count
      *  计数器
+     *
+     *  @return
      * */
     public static Collection<Integer> createZeros(Integer count){
         return createIntsWithRange(0,0,count);
@@ -288,6 +321,8 @@ public class CollectOperator {
      * 创建以1填充的集合，参数为个数
      * @param count
      *  计数器
+     *
+     *  @return
      * */
     public static Collection<Integer> createOnes(Integer count){
         return createIntsWithRange(1,0,count);
@@ -298,6 +333,8 @@ public class CollectOperator {
      * 创建随机数集合，参数为个数
      * @param count
      *  计数器
+     *
+     *  @return
      * */
     public static Collection<Double> createRandoms(Integer count){
         Stream<Double> natural = Stream.generate(RandomSupplier.RANDOM_DOUBLE_SEED);
@@ -308,6 +345,8 @@ public class CollectOperator {
      * 创建随机数集合，参数为个数
      * @param count
      *  计数器
+     *
+     *  @return
      * */
     public static Collection<Integer> createRandomInts(Integer count){
         Stream<Integer> natural = Stream.generate(RandomSupplier.RANDOM_INT_SEED);
@@ -317,6 +356,8 @@ public class CollectOperator {
      * 创建布尔值集合，参数为个数
      * @param count
      *  计数器
+     *
+     *  @return
      * */
     public static Collection<Boolean> createBooleans(Integer count){
         Stream<Boolean> natural = Stream.generate(RandomSupplier.RANDOM_BOOLEAN_SEED);
@@ -329,6 +370,8 @@ public class CollectOperator {
      *  计数器
      * @param value
      *  默认值
+     *
+     *  @return
      * */
     public static Collection<Integer> createIntsWithDefaultValue(Integer count,Integer value){
         return createIntsWithRange(value,0,count);
@@ -342,6 +385,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
+     *
+     *  @return
      * */
     public static <T> Boolean everyOne(Collection<T> list, Predicate<T> predicate){
 ////        Boolean temp = Boolean.TRUE;
@@ -359,6 +404,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
+     *
+     *  @return
      * */
     public static <T> Boolean hasOne(Collection<T> list, Predicate<T> predicate){
         return list.stream().anyMatch(predicate);
@@ -371,6 +418,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
+     *
+     *  @return
      * */
     public static <T> Boolean noOne(Collection<T> list, Predicate<T> predicate){
         return list.stream().noneMatch(predicate);
@@ -383,6 +432,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
+     *
+     *  @return
      * */
     public static <T> Collection<T> everyFixTo(Collection<T> list, Predicate<T> predicate){
         return list.stream().filter(predicate).collect(Collectors.toList());
@@ -394,6 +445,7 @@ public class CollectOperator {
      *  操作集合
      * @param function
      *  表达式 类似 it -&gt; it.toLowerCase()
+     *  @return
      * */
     public static <T,R> Collection<R> everyMapTo(Collection<T> list, Function<T,R> function){
         return list.stream().map(function).collect(Collectors.toList());
@@ -405,6 +457,8 @@ public class CollectOperator {
      *  操作集合
      * @param accumulator
      *  汇集算子
+     *
+     *  @return
      */
     public static <T,R> R everyReduceTo(Collection<T> list, BinaryOperator<R> accumulator){
         return list.stream().map(x->(R)x).reduce(accumulator).get();
@@ -418,6 +472,8 @@ public class CollectOperator {
      *  映射操作
      * @param accumulator
      *  汇集算子
+     *
+     *  @return
      */
     public static <T,R> R everyMapAndReduceTo(Collection<T> list, Function<T,R> function, BinaryOperator<R> accumulator){
         return list.stream().map(function).reduce(accumulator).get();
@@ -432,6 +488,7 @@ public class CollectOperator {
      *  过滤算子
      * @param function
      *  映射操作
+     * @return
      *
      */
     public static <T,R> Collection<R> everyFixThenMapTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function){
@@ -455,5 +512,63 @@ public class CollectOperator {
     public static <T,R> R everyFixThenMapAndReduceTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function, BinaryOperator<R> accumulator){
         return list.stream().filter(predicate).map(function).reduce(accumulator).get();
     }
+//http://www.runoob.com/java/java8-functional-interfaces.html
+    //http://blog.csdn.net/u014646662/article/details/52261511
+    /**
+     * 创建一个原始集合的反转集合
+     * @param list 操作集合
+     * @return 反转后的新集合
+     * */
+    public static <T> Collection<T>  reverse(Collection<T> list){
+        if(list==null || list.size()==0) return list;
+        int size = list.size();
+        List<T> temps = new ArrayList<>(size);
+        Object[] os = list.toArray();
+        for(int i = 0;i < size;i++){
+            temps.add((T)os[size-i-1]);
+        }
+        return temps;
+    }
 
+    /**
+     * 将集合去重，并返回新集合
+     * @param list 操作集合
+     * @return 去重后集合
+     * */
+    public static <T> Collection<T> distinct(Collection<T> list){
+        if(list==null || list.size()==0) return list;
+        return list.stream().distinct().collect(Collectors.toList());
+    }
+
+    public static <T> Optional<T> findFirst(Collection<T> list,Predicate<T> predicate){
+        return list.stream().filter(predicate).findFirst();
+    }
+
+    public static <T> void forEach(Collection<T> list, Consumer<T> action){
+        list.stream().forEach(action);
+    }
+
+    public static <T extends Comparable<? super T>> T max(Collection<T> list){
+        return max(list,Comparator.comparing(t->t));
+    }
+
+    public static <T> T max(Collection<T> list,Comparator<T> comparator){
+        return list.stream().max(comparator).get();
+    }
+
+    public static <T,U extends Comparable<? super U>> T max(Collection<T> list,Function<? super T, ? extends U> keyExtractor){
+        return max(list,Comparator.comparing(keyExtractor));
+    }
+
+    public static <T extends Comparable<? super T>> T min(Collection<T> list){
+        return min(list,Comparator.comparing(t->t));
+    }
+
+    public static <T> T min(Collection<T> list,Comparator<T> comparator){
+        return list.stream().min(comparator).get();
+    }
+
+    public static <T,U extends Comparable<? super U>> T min(Collection<T> list,Function<? super T, ? extends U> keyExtractor){
+        return min(list,Comparator.comparing(keyExtractor));
+    }
 }

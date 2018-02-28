@@ -1,9 +1,6 @@
 package com.dafei1288.max;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class testMergeMap {
     public static void main(String[] args) {
@@ -38,10 +35,25 @@ public class testMergeMap {
 
         t = CollectOperator.plus(CollectOperator.createIntsWithRange(10),CollectOperator.createIntsWithRange(0,2,15),false,1,1);
         System.out.println(t);
+
         //t.stream().forEach(System.out::println);
 
         t = CollectOperator.createRandoms(10);
         System.out.println(t);
 
+
+        Collection<Integer> relist =CollectOperator.reverse(CollectOperator.createIntsWithRange(10));
+        System.out.println(relist);
+
+        Collection<String> revalues =CollectOperator.reverse(values);
+        System.out.println(values);
+        CollectOperator.forEach(revalues,System.out::println);
+
+        String r = CollectOperator.max(revalues, Comparator.comparing(u->u));
+        System.out.println(r);
+
+        List<String> valueDistinct = Arrays.asList("USA", "USA", "France", "Germany", "USA", "U.K.","Canada");
+        Collection<String> s = CollectOperator.distinct(valueDistinct);
+        System.out.println(s);
     }
 }
