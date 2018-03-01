@@ -512,8 +512,7 @@ public class CollectOperator {
     public static <T,R> R everyFixThenMapAndReduceTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function, BinaryOperator<R> accumulator){
         return list.stream().filter(predicate).map(function).reduce(accumulator).get();
     }
-//http://www.runoob.com/java/java8-functional-interfaces.html
-    //http://blog.csdn.net/u014646662/article/details/52261511
+
     /**
      * 创建一个原始集合的反转集合
      * @param list 操作集合
@@ -570,5 +569,17 @@ public class CollectOperator {
 
     public static <T,U extends Comparable<? super U>> T min(Collection<T> list,Function<? super T, ? extends U> keyExtractor){
         return min(list,Comparator.comparing(keyExtractor));
+    }
+
+    public static <T> Collection<T> sorted(Collection<T> list){
+        return list.stream().sorted().collect(Collectors.toList());
+    }
+
+    public static <T> Collection<T> sorted(Collection<T> list,Comparator<T> comparator){
+        return list.stream().sorted(comparator).collect(Collectors.toList());
+    }
+
+    public static <T,U extends Comparable<? super U>> Collection<T> sortedByFunc(Collection<T> list,Function<? super T, ? extends U> keyExtractor){
+        return list.stream().sorted(Comparator.comparing(keyExtractor)).collect(Collectors.toList());
     }
 }

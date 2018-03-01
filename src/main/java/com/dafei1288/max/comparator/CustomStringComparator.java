@@ -1,4 +1,4 @@
-package com.dafei1288.max.functor;
+package com.dafei1288.max.comparator;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -9,7 +9,7 @@ import java.util.function.Function;
  * 自定义文本排序器
  * */
 public class CustomStringComparator implements Comparator<String> {
-    private static String myrule = "<赵<张<李<王";
+    private static String myrule = "<赵<王<张<李";
     private static RuleBasedCollator myrulecollato ;
     static{
         try {
@@ -26,7 +26,9 @@ public class CustomStringComparator implements Comparator<String> {
     public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
             Function<? super T, ? extends U> keyExtractor)
     {
-        //System.out.println("bijiao....comparing");
+
+
+        System.out.println("sorted rule is : "+myrulecollato.getRules());
         return (Comparator<T> & Serializable)
                     (c1, c2) -> myrulecollato.compare(keyExtractor.apply(c1),keyExtractor.apply(c2));
 

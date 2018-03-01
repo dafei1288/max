@@ -101,6 +101,10 @@ java.beans.PropertyChangeListener
 - [ ] 封装数据类型
 - [ ] 表达式引擎
 
+# refs
+1. [[1]](http://www.runoob.com/java/java8-functional-interfaces.html)
+1. [[2]](http://blog.csdn.net/u014646662/article/details/52261511)
+
 # links
 
 [码云](https://gitee.com/dafei1288/max)
