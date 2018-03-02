@@ -11,11 +11,12 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 /**
- * 配置类
+ * 姓名排序，顺序参考百家姓
  * 默认加载类入境下 max.yaml
  * 可以通过配置环境变量max.maxConfigFilePath 来修改变量表文件
  *
  * */
+
 public class MaxConfig {
     private static final Logger logger = LoggerFactory.getLogger(MaxConfig.class);
     private static MaxConfig maxConfig;
@@ -54,8 +55,8 @@ public class MaxConfig {
     }
 
 
-    public String getStringComparatorRule(){
-        return mcv.getMax().get("stringComparatorRule");
+    public String getSurnameComparatorRuleComparatorRule(){
+        return mcv.getMax().get("surnameComparatorRule");
     }
 
     public static class MaxConfigVO{
