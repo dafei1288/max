@@ -1,6 +1,6 @@
 package com.dafei1288.max;
 
-import com.dafei1288.max.comparator.CustomStringComparator;
+import com.dafei1288.max.comparator.SurnameComparator;
 import com.dafei1288.max.vo.Person;
 
 import java.util.ArrayList;
@@ -100,12 +100,12 @@ public class TestVo {
 
         //CustomStringComparator
 
-        rr = CollectOperator.max(persons, CustomStringComparator.comparing(Person::getFirstName));
+        rr = CollectOperator.max(persons, SurnameComparator.comparing(Person::getFirstName));
         //persons.stream().max((u1,u2)->{u1.getAge()>u2.getAge();}).get();
         System.out.println(rr);
 
         System.out.println();
-        Collection<Person> p3 = CollectOperator.sorted(persons,CustomStringComparator.comparing(Person::getFirstName));
+        Collection<Person> p3 = CollectOperator.sorted(persons,SurnameComparator.comparing(Person::getFirstName));
         CollectOperator.forEach(p3,System.out::println);
     }
 }

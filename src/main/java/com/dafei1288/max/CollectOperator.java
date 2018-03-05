@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -351,6 +352,21 @@ public class CollectOperator {
     public static Collection<Integer> createRandomInts(Integer count){
         Stream<Integer> natural = Stream.generate(RandomSupplier.RANDOM_INT_SEED);
         return natural.limit(count).collect(Collectors.toList());
+    }
+
+
+    public static Collection<Integer> createRangeInts(int startInclusive, int endExclusive){
+        return IntStream.range(startInclusive,endExclusive).boxed().collect(Collectors.toList());
+    }
+
+    public static Collection<Integer> createRangeInts(int startInclusive, int endExclusive,int setp){
+        final int s = startInclusive;
+        final int p = setp;
+        return IntStream.range(startInclusive,endExclusive).filter(
+                item->{
+                    return ((item-s)%p)==0;
+                }
+        ).boxed().collect(Collectors.toList());
     }
     /**
      * 创建布尔值集合，参数为个数
