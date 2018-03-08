@@ -18,8 +18,6 @@ import java.util.stream.Stream;
  *
  * 集合操作工具类
  * @author dafei1288
- * @version 0.1
- *
  * */
 public class CollectOperator {
     /**
