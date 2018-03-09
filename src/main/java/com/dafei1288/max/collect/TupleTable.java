@@ -1,9 +1,14 @@
 package com.dafei1288.max.collect;
 
 
+import com.google.common.collect.Table;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class TupleTable {
     private HashMap<String,Tuple> cols;
@@ -39,6 +44,10 @@ public class TupleTable {
         return this.datas.getListWithIndex(i);
     }
 
+    public Stream<? extends Tuple> dataStream(){
+        return this.datas.stream();
+    }
+
     public <E> List<E> getColumByName(String colName){
         Tuple t = cols.get(colName);
         Integer colIndex = t.get(0);
@@ -54,4 +63,33 @@ public class TupleTable {
         datas.stream().forEach(System.out::println);
         System.out.println("**********discrib end*************");
     }
+
+    public <T extends Tuple,R extends Tuple,V> TuplePivotTable toTuplePivotTable(TupleTable table, Function<T,R> xTrans, Function<T,R> yTrans, Function<T,V> vTrans){
+        TuplePivotTable tpt = new TuplePivotTable();
+        this.dataStream().forEach(it->{
+            tpt.addARow(xTrans.apply((T)it),yTrans.apply((T)it),vTrans.apply((T)it));
+        });
+        return tpt;
+    }
+
+    public static TupleTable transPivotTable(TuplePivotTable tuplePivotTable){
+        TupleTable tt = new TupleTable();
+
+        tuplePivotTable.dataStream().forEach(it->{
+            Table.Cell<Tuple,Tuple,Object> value = (Table.Cell<Tuple, Tuple, Object>) it;
+            List<Object> temp = new ArrayList<>();
+
+            List<Object> ykeys = value.getRowKey().toList();
+            temp.addAll(ykeys);
+
+            List<Object> xkeys = value.getColumnKey().toList();
+            temp.addAll(xkeys);
+
+            temp.add(value.getValue());
+
+            tt.addARow(Tuples.tuple(temp.toArray()));
+        });
+        return tt;
+    }
+
 }

@@ -1,9 +1,6 @@
 package com.dafei1288.max;
 
-import com.dafei1288.max.collect.Tuple;
-import com.dafei1288.max.collect.TupleList;
-import com.dafei1288.max.collect.TupleTable;
-import com.dafei1288.max.collect.Tuples;
+import com.dafei1288.max.collect.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -46,5 +43,15 @@ public class TestTupleTable {
 
         Tuple rr2 = tt.getRow(2);
         System.out.println(rr2);
+
+        System.out.println();
+        TuplePivotTable tpt = TuplePivotTable.transPivotTable(tt,it->{return it.subTuple(0,0);},it->{return it.subTuple(1,1);},it->{return it.get(2);});
+        tpt.discrib();
+        tpt.forEach(System.out::println);
+
+        System.out.println(tpt.getValue(1,"张三"));
+        System.out.println(tpt.getValue(2,"张三"));
+
+        tpt.toTupleTable().discrib();
     }
 }

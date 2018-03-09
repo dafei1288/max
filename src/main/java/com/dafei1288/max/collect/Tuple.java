@@ -66,6 +66,18 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
         return (T) this.valueList.get(pos);
     }
 
+    public final String getString(final int pos) {
+        return (String) this.valueList.get(pos);
+    }
+
+    public final Integer getInteger(final int pos) {
+        return (Integer) this.valueList.get(pos);
+    }
+
+    public final Double getDouble(final int pos) {
+        return (Double) this.valueList.get(pos);
+    }
+
     /**
      * 判断元组中是否包含某元素
      *
