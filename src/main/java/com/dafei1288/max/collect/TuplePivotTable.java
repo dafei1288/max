@@ -1,6 +1,7 @@
 package com.dafei1288.max.collect;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Streams;
 import com.google.common.collect.Table;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -108,16 +111,8 @@ public class TuplePivotTable {
         TupleTable tt = new TupleTable();
 
         this.datas.cellSet().stream().forEach(it->{
-            List<Object> temp = new ArrayList<>();
-
-            List<Object> ykeys = it.getRowKey().toList();
-            temp.addAll(ykeys);
-
-            List<Object> xkeys = it.getColumnKey().toList();
-            temp.addAll(xkeys);
-
+            List<Object> temp = Streams.concat(it.getRowKey().stream(),it.getColumnKey().stream()).collect(Collectors.toList());
             temp.add(it.getValue());
-
             tt.addARow(Tuples.tuple(temp.toArray()));
         });
         return tt;
