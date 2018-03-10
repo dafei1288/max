@@ -98,17 +98,21 @@ java.beans.PropertyChangeListener
 # TODO
 - [x] 集合四则运算运算操作
 - [x] 关系代数运算
-- [ ] 封装数据类型
-- [ ] 表达式引擎
+- [ ] ~~封装数据类型~~
+- [ ] ~~表达式引擎~~
+- [x] TupleTable 及 TuplePivotTable 原型实现
+- [ ] TupleTable 及 TuplePivotTable 特性演化
+- [ ] 文档补全
+- [ ] 测试用例
 
 # refs
-1. [[1]](http://www.runoob.com/java/java8-functional-interfaces.html)
-1. [[2]](http://blog.csdn.net/u014646662/article/details/52261511)
+1. [java8-functional-interfaces[1]](http://www.runoob.com/java/java8-functional-interfaces.html)
+1. [java8新特性 lambda Stream map(函数式编程)[2]](http://blog.csdn.net/u014646662/article/details/52261511)
 
 # links
 
-[码云](https://gitee.com/dafei1288/max)
+1. [码云](https://gitee.com/dafei1288/max)
 
-[github](https://github.com/dafei1288/max)
+1. [github](https://github.com/dafei1288/max)
 
-(update@2018/2/26)
+(update@2018/3/10)
