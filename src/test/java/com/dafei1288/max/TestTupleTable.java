@@ -53,5 +53,15 @@ public class TestTupleTable {
         System.out.println(tpt.getValue(2,"张三"));
 
         tpt.toTupleTable().discrib();
+
+        System.out.println(Tuples.combine(r1,r2));
+        System.out.println(Tuples.combine(r1,r2,r3));
+
+        System.out.println(".........................");
+        TupleTable tta= tt.crossJoin(tt);
+        tta.discrib();
+
+        TupleTable ttb= tt.innerJoin(tt,it->it.get(0).equals(it.get(3)));
+        ttb.discrib();
     }
 }

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * 创建元组工具类，使用更加简便
@@ -108,6 +109,30 @@ public final class Tuples {
         return TupleN.with(args);
     }
 
+
+
+    public static Tuple combine(Tuple...tuples){
+        List<Tuple> allList = Arrays.asList(tuples);
+//        int counts = allList.stream().map(it->{return it.size();}).reduce((sum, size) -> sum + size).get();
+//        System.out.println("all tuples size = "+counts);
+        List<Object> allObjects = allList.stream().map(it->it.toList()).flatMap(streams -> streams.stream()).collect(toList());
+//        System.out.println("all tuples  = "+allObjects);
+        int counts = allObjects.size();
+        Tuple t = null;
+        switch (counts){
+            case 0: t = Tuples.tuple();break;
+            case 1: t = Tuples.tuple(allObjects.get(0));break;
+            case 2: t = Tuples.tuple(allObjects.get(0),allObjects.get(1));break;
+            case 3: t = Tuples.tuple(allObjects.get(0),allObjects.get(1),allObjects.get(2));break;
+            case 4: t = Tuples.tuple(allObjects.get(0),allObjects.get(1),allObjects.get(2),allObjects.get(3));break;
+            case 5: t = Tuples.tuple(allObjects.get(0),allObjects.get(1),allObjects.get(2),allObjects.get(3),allObjects.get(4));break;
+            default: t = Tuples.tuple(allObjects.toArray());break;
+        }
+
+        return t;
+    }
+
+
     /**
      * 元组列表针对其中某个元素排序，例如
      * <pre>{@code
@@ -169,4 +194,6 @@ public final class Tuples {
             throw new IllegalArgumentException("index must >= 0");
         Arrays.sort(array, Comparator.comparing(t -> t.get(index), comparator));
     }
+
+
 }

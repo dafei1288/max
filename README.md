@@ -108,6 +108,7 @@ java.beans.PropertyChangeListener
 # refs
 1. [java8-functional-interfaces[1]](http://www.runoob.com/java/java8-functional-interfaces.html)
 1. [java8新特性 lambda Stream map(函数式编程)[2]](http://blog.csdn.net/u014646662/article/details/52261511)
+1. [common-sql-clauses-and-their-equivalents-in-java-8-streams[3]](https://blog.jooq.org/2015/08/13/common-sql-clauses-and-their-equivalents-in-java-8-streams/)
 
 # links
 

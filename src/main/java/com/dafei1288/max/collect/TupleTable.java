@@ -4,17 +4,20 @@ package com.dafei1288.max.collect;
 import com.google.common.collect.Streams;
 import com.google.common.collect.Table;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import javax.annotation.processing.SupportedSourceVersion;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TupleTable {
     private HashMap<String,Tuple> cols;
     private TupleList<Tuple> datas;
+
+    private void setDatas(TupleList<Tuple> datas){
+        this.datas = datas;
+    }
 
     public TupleTable(){
         cols = new LinkedHashMap<>();
@@ -56,6 +59,27 @@ public class TupleTable {
         return this.datas.getListWithIndex(colIndex);
     }
 
+
+    public TupleTable crossJoin(TupleTable otherTable){
+        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow,(Tuple)otherRow))).collect(Collectors.toList());
+        TupleTable t = new TupleTable();
+        TupleList<Tuple> tl = new TupleList<Tuple>();
+        ct.forEach(it->tl.add(it));
+        t.setDatas(tl);
+        return t;
+    }
+
+
+    public TupleTable innerJoin(TupleTable otherTable, Predicate<Tuple> predicate){
+        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow,(Tuple)otherRow))).filter(predicate).collect(Collectors.toList());
+        TupleTable t = new TupleTable();
+        TupleList<Tuple> tl = new TupleList<Tuple>();
+        ct.forEach(it->tl.add(it));
+        t.setDatas(tl);
+        return t;
+    }
+
+
     public void discrib(){
         System.out.println("**********discrib start*************");
         System.out.println("cols size : "+cols.size());
@@ -85,5 +109,6 @@ public class TupleTable {
         });
         return tt;
     }
+
 
 }
