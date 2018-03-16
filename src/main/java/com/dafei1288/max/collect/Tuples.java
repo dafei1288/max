@@ -132,6 +132,19 @@ public final class Tuples {
         return t;
     }
 
+    public static Tuple createEmptyTuple(int size){
+        Tuple t = null;
+        switch (size){
+            case 0: t = Tuples.tuple();break;
+            case 1: t = Tuples.tuple(null);break;
+            case 2: t = Tuples.tuple(null,null);break;
+            case 3: t = Tuples.tuple(null,null,null);break;
+            case 4: t = Tuples.tuple(null,null,null,null);break;
+            case 5: t = Tuples.tuple(null,null,null,null,null);break;
+            default: t = Tuples.tuple(new Object[size]);break;
+        }
+        return t;
+    }
 
     /**
      * 元组列表针对其中某个元素排序，例如

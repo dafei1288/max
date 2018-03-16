@@ -5,6 +5,7 @@ import com.dafei1288.max.collect.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class TestTupleTable {
     public static void main(String[] args) {
@@ -57,11 +58,19 @@ public class TestTupleTable {
         System.out.println(Tuples.combine(r1,r2));
         System.out.println(Tuples.combine(r1,r2,r3));
 
-        System.out.println(".........................");
-        TupleTable tta= tt.crossJoin(tt);
-        tta.discrib();
+//        System.out.println(".........................");
+//        TupleTable tta= tt.crossJoin(tt);
+//        tta.discrib();
+//
+//        TupleTable ttb= tt.innerJoin(tt,it->it.get(0).equals(it.get(3)));
+//        ttb.discrib();
 
-        TupleTable ttb= tt.innerJoin(tt,it->it.get(0).equals(it.get(3)));
-        ttb.discrib();
+
+        TupleTable t2 = new TupleTable();
+        t2.addARow(Tuples.tuple(1,"11111",3000.00));
+//        TupleTable ttc= tt.leftOuterJoin(t2,0,0);
+//        ttc.discrib();
+        TupleTable ttd= tt.rightOuterJoin(t2,0,0);
+        ttd.discrib();
     }
 }
