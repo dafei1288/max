@@ -28,7 +28,7 @@ public class TupleList<T extends Tuple> extends ArrayList {
      * @return 列表
      * */
     public <E> List<E> getListWithIndex(int i){
-        return (List<E>) this.stream().map(t->{return (E)((T)t).get(i);}).collect(Collectors.toList());
+        return (List<E>) this.stream().map(t->{return ((T)t).get(i);}).collect(Collectors.toList());
     }
 
 

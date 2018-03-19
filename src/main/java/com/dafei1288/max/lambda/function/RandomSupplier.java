@@ -1,4 +1,4 @@
-package com.dafei1288.max.functor;
+package com.dafei1288.max.lambda.function;
 
 import com.google.common.base.Supplier;
 import org.apache.commons.lang3.RandomUtils;

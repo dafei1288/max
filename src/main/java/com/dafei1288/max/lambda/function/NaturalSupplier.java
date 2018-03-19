@@ -1,4 +1,4 @@
-package com.dafei1288.max.functor;
+package com.dafei1288.max.lambda.function;
 
 import com.google.common.base.Supplier;
 
@@ -13,11 +13,12 @@ public class NaturalSupplier implements Supplier<Integer> {
 
     public NaturalSupplier(Integer value){
         this.value = value;
-    };
+    }
+
     public NaturalSupplier(Integer value,Integer setp){
         this.value = value;
         this.setp = setp;
-    };
+    }
 
     public Integer getValue() {
         return value;
@@ -33,7 +34,8 @@ public class NaturalSupplier implements Supplier<Integer> {
 
     public NaturalSupplier(){
         this.value = 0;
-    };
+    }
+
     public Integer get() {
         this.value = this.value + this.setp;
         return this.value;

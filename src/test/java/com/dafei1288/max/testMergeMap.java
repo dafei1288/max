@@ -156,7 +156,7 @@ public class testMergeMap {
         t3.stream().forEach(System.out::println);
 
         System.out.println();
-        t1 = tl.getListWithFun(it->{return (String)(((Tuple)it).get(1));});
+        t1 = tl.getListWithFun(it->{return ((Tuple)it).get(1);});
         t1.stream().forEach(System.out::println);
 
         System.out.println();

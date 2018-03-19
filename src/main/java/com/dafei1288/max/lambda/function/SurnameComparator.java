@@ -1,4 +1,4 @@
-package com.dafei1288.max.comparator;
+package com.dafei1288.max.lambda.function;
 
 import com.dafei1288.max.config.MaxConfig;
 import org.slf4j.Logger;

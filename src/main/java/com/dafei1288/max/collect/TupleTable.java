@@ -99,7 +99,7 @@ public class TupleTable {
      * @return 连接后表
      * */
     public TupleTable crossJoin(TupleTable otherTable){
-        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow,(Tuple)otherRow))).collect(Collectors.toList());
+        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).collect(Collectors.toList());
         TupleTable t = new TupleTable();
         TupleList<Tuple> tl = new TupleList<>();
         ct.forEach(it->tl.add(it));
@@ -114,7 +114,7 @@ public class TupleTable {
      * @return 连接后表
      * */
     public TupleTable innerJoin(TupleTable otherTable, Predicate<Tuple> predicate){
-        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow,(Tuple)otherRow))).filter(predicate).collect(Collectors.toList());
+        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).filter(predicate).collect(Collectors.toList());
         TupleTable t = new TupleTable();
         TupleList<Tuple> tl = new TupleList<>();
         ct.forEach(it->tl.add(it));

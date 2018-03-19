@@ -1,4 +1,4 @@
-package com.dafei1288.max.functor;
+package com.dafei1288.max.lambda.function;
 
 import org.apache.commons.lang3.math.NumberUtils;
 

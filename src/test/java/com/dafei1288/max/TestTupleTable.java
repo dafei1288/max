@@ -15,7 +15,7 @@ public class TestTupleTable {
     public static TupleTable tt;
     public static TupleTable t2;
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
         tt = new TupleTable();
 
 
