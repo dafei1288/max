@@ -104,12 +104,12 @@ public class TestFilterByVo {
 
         //CustomStringComparator
 
-        rr = CollectOperator.max(persons, SurnameComparator.comparing(Person::getFirstName));
+//        rr = CollectOperator.max(persons, SurnameComparator.comparing(Person::getFirstName));
         //persons.stream().max((u1,u2)->{u1.getAge()>u2.getAge();}).get();
-        System.out.println(rr);
+//        System.out.println(rr);
 
-        System.out.println();
-        Collection<Person> p3 = CollectOperator.sorted(persons,SurnameComparator.comparing(Person::getFirstName));
-        CollectOperator.forEach(p3,System.out::println);
+//        System.out.println();
+//        Collection<Person> p3 = CollectOperator.sorted(persons,SurnameComparator.comparing(Person::getFirstName));
+//        CollectOperator.forEach(p3,System.out::println);
     }
 }

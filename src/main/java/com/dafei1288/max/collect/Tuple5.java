@@ -55,8 +55,8 @@ public final class Tuple5<A, B, C, D, E> extends Tuple {
 
     /**
      * 为元祖添加元素，返回新元组
-     * @param
-     * @param <E>
+     * @param e 元素
+     * @param <E> 原型泛型
      *
      * @return
      *

@@ -168,8 +168,6 @@ public class TupleTable {
      * @param yTrans 列转换器
      * @param vTrans 值转换器
      * @param <T> tuple子类
-     * @Param <R> tuple子类
-     * @Param <V> 值泛型
      * */
     public <T extends Tuple,R extends Tuple,V> TuplePivotTable toTuplePivotTable(TupleTable table, Function<T,R> xTrans, Function<T,R> yTrans, Function<T,V> vTrans){
         TuplePivotTable tpt = new TuplePivotTable();

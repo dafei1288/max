@@ -43,8 +43,8 @@ public class TupleList<T extends Tuple> extends ArrayList {
 
     /**
      * 为元组列表内每个元组添加元素
-     * @param
-     * @param <E>
+     * @param lists 添加元素列
+     * @param <E> 元素泛型
      *
      * @return
      *
@@ -63,8 +63,9 @@ public class TupleList<T extends Tuple> extends ArrayList {
 
     /**
      * 为元组列表内每个元组添加元素，不足数量以默认值填充
-     * @param
-     * @param <E>
+     * @param lists 添加元素列
+     * @param defaultValue 默认元素
+     * @param <E> 元素泛型
      *
      * @return
      *

@@ -139,10 +139,12 @@ public final class Tuples {
      * */
     public static Tuple createEmptyTuple(int size){
         Tuple t = null;
+        Object first = null;
+        Object second = null;
         switch (size){
             case 0: t = Tuples.tuple();break;
-            case 1: t = Tuples.tuple(null);break;
-            case 2: t = Tuples.tuple(null,null);break;
+            case 1: t = Tuples.tuple(first);break;
+            case 2: t = Tuples.tuple(first,second);break;
             case 3: t = Tuples.tuple(null,null,null);break;
             case 4: t = Tuples.tuple(null,null,null,null);break;
             case 5: t = Tuples.tuple(null,null,null,null,null);break;

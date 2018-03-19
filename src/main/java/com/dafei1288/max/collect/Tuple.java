@@ -269,8 +269,8 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
 
     /**
      * 为元祖添加元素，返回新元组
-     * @param
-     * @param <E>
+     * @param e 元素
+     * @param <E> 原型泛型
      *
      * @return
      *
