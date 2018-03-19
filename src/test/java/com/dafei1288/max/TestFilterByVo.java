@@ -2,17 +2,20 @@ package com.dafei1288.max;
 
 import com.dafei1288.max.comparator.SurnameComparator;
 import com.dafei1288.max.vo.Person;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 
-public class TestVo {
+public class TestFilterByVo {
 
     public static Collection<Person> persons = new ArrayList<>();
     public static Collection<Person> distinctpersons = new ArrayList<>();
 
+    @BeforeClass
     public static void initPersons(){
         persons.add(new Person("张","三",15,new Date(),3000d));
         persons.add(new Person("张","四",17,new Date(),7800d));
@@ -48,8 +51,9 @@ public class TestVo {
         distinctpersons.add(new Person("王","八",15,new Date(),3000d));
     }
 
-    public static void main(String[] args) {
-        initPersons();
+    @Test
+    public void testAll() {
+
         System.out.println(persons);
         Collection<Person> p1 = CollectOperator.everyFixTo(persons,x->x.getAge()>20);
         System.out.println(p1);

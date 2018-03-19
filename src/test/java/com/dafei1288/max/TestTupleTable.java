@@ -1,15 +1,22 @@
 package com.dafei1288.max;
 
-import com.dafei1288.max.collect.*;
+import com.dafei1288.max.collect.Tuple;
+import com.dafei1288.max.collect.TupleTable;
+import com.dafei1288.max.collect.Tuples;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestTupleTable {
-    public static void main(String[] args) {
-        TupleTable tt = new TupleTable();
+    public static TupleTable tt;
+    public static TupleTable t2;
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        tt = new TupleTable();
 
 
         Tuple col1 = Tuples.tuple(0,"id","int");
@@ -37,40 +44,16 @@ public class TestTupleTable {
 
         tt.discrib();
 
-        List<String> name = tt.getColum(1);
-        List<String> nameByName = tt.getColumByName("name");
-        System.out.println(name);
-        System.out.println(nameByName);
-
-        Tuple rr2 = tt.getRow(2);
-        System.out.println(rr2);
-
-        System.out.println();
-        TuplePivotTable tpt = TuplePivotTable.transPivotTable(tt,it->{return it.subTuple(0,0);},it->{return it.subTuple(1,1);},it->{return it.get(2);});
-        tpt.discrib();
-        tpt.forEach(System.out::println);
-
-        System.out.println(tpt.getValue(1,"张三"));
-        System.out.println(tpt.getValue(2,"张三"));
-
-        tpt.toTupleTable().discrib();
-
-        System.out.println(Tuples.combine(r1,r2));
-        System.out.println(Tuples.combine(r1,r2,r3));
-
-//        System.out.println(".........................");
-//        TupleTable tta= tt.crossJoin(tt);
-//        tta.discrib();
-//
-//        TupleTable ttb= tt.innerJoin(tt,it->it.get(0).equals(it.get(3)));
-//        ttb.discrib();
-
-
-        TupleTable t2 = new TupleTable();
+        t2 = new TupleTable();
         t2.addARow(Tuples.tuple(1,"11111",3000.00));
-//        TupleTable ttc= tt.leftOuterJoin(t2,0,0);
-//        ttc.discrib();
+    }
+
+    @Test
+    public void testRightOuterJoin(){
+        Tuple res = Tuples.tuple(1,"11111",3000.00,1,"张三",3000.00);
         TupleTable ttd= tt.rightOuterJoin(t2,0,0);
         ttd.discrib();
+
+        assertEquals(ttd.getRow(0),res);
     }
 }
