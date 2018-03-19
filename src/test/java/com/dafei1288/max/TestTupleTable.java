@@ -1,6 +1,6 @@
 package com.dafei1288.max;
 
-import com.dafei1288.max.collect.Tuple;
+import com.dafei1288.max.collect.tuple.Tuple;
 import com.dafei1288.max.collect.TupleTable;
 import com.dafei1288.max.collect.Tuples;
 import org.junit.BeforeClass;

@@ -1,4 +1,6 @@
-package com.dafei1288.max.collect;
+package com.dafei1288.max.collect.tuple;
+
+import com.dafei1288.max.collect.Tuples;
 
 import static java.util.Objects.requireNonNull;
 

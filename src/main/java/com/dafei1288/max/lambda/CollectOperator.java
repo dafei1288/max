@@ -1,8 +1,8 @@
-package com.dafei1288.max;
+package com.dafei1288.max.lambda;
 
-import com.dafei1288.max.functor.BaseOperator;
-import com.dafei1288.max.functor.NaturalSupplier;
-import com.dafei1288.max.functor.RandomSupplier;
+import com.dafei1288.max.lambda.function.BaseOperator;
+import com.dafei1288.max.lambda.function.NaturalSupplier;
+import com.dafei1288.max.lambda.function.RandomSupplier;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;

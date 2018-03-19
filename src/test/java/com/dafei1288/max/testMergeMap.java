@@ -1,9 +1,10 @@
 package com.dafei1288.max;
 
-import com.dafei1288.max.collect.Tuple;
+import com.dafei1288.max.collect.tuple.Tuple;
 import com.dafei1288.max.collect.TupleList;
 import com.dafei1288.max.collect.Tuples;
-import com.dafei1288.max.functor.Functors;
+import com.dafei1288.max.lambda.function.Functors;
+import com.dafei1288.max.lambda.CollectOperator;
 import org.junit.Test;
 
 import java.util.*;

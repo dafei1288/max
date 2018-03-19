@@ -1,6 +1,7 @@
 package com.dafei1288.max.collect;
 
 
+import com.dafei1288.max.collect.tuple.Tuple;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Streams;
 import com.google.common.collect.Table;

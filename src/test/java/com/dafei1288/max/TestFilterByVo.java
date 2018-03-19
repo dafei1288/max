@@ -1,6 +1,6 @@
 package com.dafei1288.max;
 
-import com.dafei1288.max.comparator.SurnameComparator;
+import com.dafei1288.max.lambda.CollectOperator;
 import com.dafei1288.max.vo.Person;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class TestFilterByVo {
     public void testAll() {
 
         System.out.println(persons);
-        Collection<Person> p1 = CollectOperator.everyFixTo(persons,x->x.getAge()>20);
+        Collection<Person> p1 = CollectOperator.everyFixTo(persons, x->x.getAge()>20);
         System.out.println(p1);
 
         System.out.println();

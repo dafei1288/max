@@ -1,4 +1,6 @@
-package com.dafei1288.max.collect;
+package com.dafei1288.max.collect.tuple;
+
+import com.dafei1288.max.collect.Tuples;
 
 /**
  * 表示有3个元素的元组类型

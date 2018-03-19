@@ -1,5 +1,7 @@
 package com.dafei1288.max.collect;
 
+import com.dafei1288.max.collect.tuple.*;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
