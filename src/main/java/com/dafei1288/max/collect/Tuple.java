@@ -268,7 +268,7 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
     public abstract Tuple swap();
 
     /**
-     * 为元祖添加元素
+     * 为元祖添加元素，返回新元组
      * @param
      * @param <E>
      *

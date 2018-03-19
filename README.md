@@ -103,6 +103,7 @@ java.beans.PropertyChangeListener
 - [x] TupleTable 及 TuplePivotTable 原型实现
 - [x] TupleTable 及 TuplePivotTable 特性演化（TupleTable 添加 内连接、全外连接、左外连接、右外连接）
 - [ ] 文档补全
+- [x] 添加doc
 - [x] 测试用例
 
 # refs

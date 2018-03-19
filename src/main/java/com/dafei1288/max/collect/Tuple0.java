@@ -24,6 +24,14 @@ public final class Tuple0 extends Tuple {
         return this;
     }
 
+    /**
+     * 为元祖添加元素，返回新元组
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     @Override
     public <E> Tuple addElement(E e) {
         return Tuple1.with(e);

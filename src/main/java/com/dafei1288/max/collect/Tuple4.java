@@ -48,6 +48,14 @@ public final class Tuple4<A, B, C, D> extends Tuple {
         return new Tuple4<>(this.fourth, this.third, this.second, this.first);
     }
 
+    /**
+     * 为元祖添加元素，返回新元组
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     @Override
     public <E> Tuple addElement(E e) {
         return Tuple5.with(this.first,this.second,this.third,this.fourth,e);

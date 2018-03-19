@@ -110,13 +110,14 @@ public final class Tuples {
     }
 
 
-
+    /**
+     * 由几个元组合并成新元组
+     * @param tuples 元组组
+     * @return 新元组
+     * */
     public static Tuple combine(Tuple...tuples){
         List<Tuple> allList = Arrays.asList(tuples);
-//        int counts = allList.stream().map(it->{return it.size();}).reduce((sum, size) -> sum + size).get();
-//        System.out.println("all tuples size = "+counts);
         List<Object> allObjects = allList.stream().map(it->it.toList()).flatMap(streams -> streams.stream()).collect(toList());
-//        System.out.println("all tuples  = "+allObjects);
         int counts = allObjects.size();
         Tuple t = null;
         switch (counts){
@@ -131,7 +132,11 @@ public final class Tuples {
 
         return t;
     }
-
+    /**
+     * 创建制定元素个数的空元组
+     * @param size 元组个数
+     * @return 元组
+     * */
     public static Tuple createEmptyTuple(int size){
         Tuple t = null;
         switch (size){

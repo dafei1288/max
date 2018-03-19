@@ -37,6 +37,14 @@ public final class Tuple1<A> extends Tuple {
         return new Tuple1<>(this.first);
     }
 
+    /**
+     * 为元祖添加元素，返回新元组
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     @Override
     public <E> Tuple addElement(E e) {
         return Tuple2.with(this.first,e);

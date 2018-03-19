@@ -21,14 +21,34 @@ public class TupleList<T extends Tuple> extends ArrayList {
         super(initialCapacity);
     }
 
+    /**
+     * 根据索引获取元组内指定索引值得集合
+     * @param i 索引
+     * @return 列表
+     * */
     public <E> List<E> getListWithIndex(int i){
         return (List<E>) this.stream().map(t->{return (E)((T)t).get(i);}).collect(Collectors.toList());
     }
 
+
+    /**
+     * 根据函数将元组值转换后形成列表
+     * @param fun 函数
+     * @return 列表
+     * */
     public <E> List<E> getListWithFun(Function<T, E> fun){
         return (List<E>) this.stream().map(fun).collect(Collectors.toList());
     }
 
+
+    /**
+     * 为元组列表内每个元组添加元素
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     public <E> TupleList<T> addElements(List<E> lists) throws RuntimeException {
         if(lists==null || (this.size() > lists.size())){
             throw new RuntimeException("can't add element with different size.");
@@ -36,12 +56,19 @@ public class TupleList<T extends Tuple> extends ArrayList {
         TupleList<T> tuples = new TupleList<>(this.size());
         IntStream.range(0,this.size()).forEach(index->{
             Tuple t = ((Tuple)this.get(index)).addElement(lists.get(index));
-//            System.out.println("add ==> " +lists.get(index)+" to "+ t );
             tuples.add(t);
         });
         return tuples;
     }
 
+    /**
+     * 为元组列表内每个元组添加元素，不足数量以默认值填充
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     public <E> TupleList<T> addElements(List<E> lists, E defaultValue){
         if(lists==null || lists.size()==0){
             return this;

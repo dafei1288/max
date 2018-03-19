@@ -39,6 +39,14 @@ public final class TupleN extends Tuple {
         return new TupleN(args);
     }
 
+    /**
+     * 为元祖添加元素，返回新元组
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     @Override
     public <E> Tuple addElement(E e) {
         final Object[] array = new Object[this.size()+1];

@@ -53,6 +53,14 @@ public final class Tuple5<A, B, C, D, E> extends Tuple {
         return new Tuple5<>(this.fifth, this.fourth, this.third, this.second, this.first);
     }
 
+    /**
+     * 为元祖添加元素，返回新元组
+     * @param
+     * @param <E>
+     *
+     * @return
+     *
+     * */
     @Override
     public <E> Tuple addElement(E e) {
         return TupleN.with(this.first,this.second,this.third,this.fourth,this.fifth,e);
