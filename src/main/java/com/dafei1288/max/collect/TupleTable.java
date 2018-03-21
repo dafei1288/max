@@ -10,9 +10,13 @@ import com.google.common.collect.Table;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
+
 /**
  * 元组列表
  * 利用元组实现列表
@@ -21,10 +25,14 @@ public class TupleTable {
     private HashMap<String,Tuple> cols;
     private TupleList<Tuple> datas;
 
-    private void setDatas(TupleList<Tuple> datas){
+    private TupleTable setDatas(TupleList<Tuple> datas){
+        this.datas = datas;
+        return this;
+    }
+    public TupleTable(TupleList<Tuple> datas){
+        cols = new LinkedHashMap<>();
         this.datas = datas;
     }
-
     public TupleTable(){
         cols = new LinkedHashMap<>();
         datas = new TupleList();
@@ -32,8 +40,8 @@ public class TupleTable {
 
     /**
      * 添加元数据
-     * @param cols
-     * @return
+     * @param cols 列原数据集合
+     * @return 返回当前对象
      * */
     @Deprecated public TupleTable addMetadata(HashMap<String,Tuple> cols){
         this.cols = cols;
@@ -41,7 +49,8 @@ public class TupleTable {
     }
     /**
      * 将对象封装成元素再添加到表内
-     * @return this
+     * @param objs 对象数组
+     * @return 返回当前对象
      * */
     public TupleTable fillARow(Object...objs){
         Tuple t = Tuples.tuple(objs);
@@ -51,6 +60,7 @@ public class TupleTable {
 
     /**
      * 将元组添加到表内
+     * @param tuple 行元组
      * @return this
      * */
     public TupleTable addARow(Tuple tuple){
@@ -69,6 +79,7 @@ public class TupleTable {
     /**
      * 根据列索引获取列数据
      * @param i 列号
+     * @param <E> 对象泛型
      * @return 列数据
      * */
     public <E> List<E> getColum(int i){
@@ -76,8 +87,8 @@ public class TupleTable {
     }
     /**
      * 获取行数据流
-     * @param <T>
-     * @return
+     * @param <T> 对象泛型 Tuple子类
+     * @return 流
      * */
     public <T  extends Tuple> Stream<T> dataStream(){
         return this.datas.stream();
@@ -85,6 +96,7 @@ public class TupleTable {
     /**
      * 根据列名获取列数据
      * @param colName 列名 ， 必须匹配元数据
+     * @param <E> 对象泛型
      * @return 列数据
      * */
     public <E> List<E> getColumByName(String colName){
@@ -99,7 +111,7 @@ public class TupleTable {
      * @return 连接后表
      * */
     public TupleTable crossJoin(TupleTable otherTable){
-        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).collect(Collectors.toList());
+        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).collect(toList());
         TupleTable t = new TupleTable();
         TupleList<Tuple> tl = new TupleList<>();
         ct.forEach(it->tl.add(it));
@@ -114,10 +126,9 @@ public class TupleTable {
      * @return 连接后表
      * */
     public TupleTable innerJoin(TupleTable otherTable, Predicate<Tuple> predicate){
-        List<Tuple> ct = (List<Tuple>) this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).filter(predicate).collect(Collectors.toList());
+        Stream<Tuple> st = this.datas.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).filter(predicate);
+        TupleList<Tuple> tl = st.collect(toCollection(TupleList::new));
         TupleTable t = new TupleTable();
-        TupleList<Tuple> tl = new TupleList<>();
-        ct.forEach(it->tl.add(it));
         t.setDatas(tl);
         return t;
     }
@@ -131,10 +142,8 @@ public class TupleTable {
     public TupleTable leftOuterJoin(TupleTable otherTable,int leftKeyIndex,int rightKeyIndex){
         int esize = otherTable.dataStream().findFirst().get().size();
         Stream<Tuple> tt = this.dataStream().flatMap(currentRow->defaultIfEmpty(otherTable.dataStream().filter(otherRow->Objects.equals(currentRow.get(leftKeyIndex),otherRow.get(rightKeyIndex))),()->{return Tuples.createEmptyTuple(esize);}).map(otherRow->Tuples.combine(currentRow,otherRow)));
-        List<Tuple> ct = tt.collect(Collectors.toList());
+        TupleList<Tuple> tl = tt.collect(toCollection(TupleList::new));
         TupleTable t = new TupleTable();
-        TupleList<Tuple> tl = new TupleList<>();
-        ct.forEach(it->tl.add(it));
         t.setDatas(tl);
         return t;
     }
@@ -148,6 +157,160 @@ public class TupleTable {
     public TupleTable rightOuterJoin(TupleTable otherTable,int leftKeyIndex,int rightKeyIndex){
         return otherTable.leftOuterJoin(this,rightKeyIndex,leftKeyIndex);
     }
+
+    /**
+     * 拼接两张数据表
+     * @param otherTable 外表
+     * @return 拼接后新表
+     * */
+    public TupleTable union(TupleTable otherTable){
+        TupleList tl =  Stream.concat(this.dataStream(),otherTable.dataStream()).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl);
+        return temp;
+    }
+
+
+    /**
+     * 过滤当前数据表
+     * @param predicate 过滤条件
+     * @return 新数据表
+     * */
+    public  TupleTable filter(Predicate<Tuple> predicate){
+        TupleList tl =  this.dataStream().filter(predicate).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl);
+        return temp;
+    }
+
+    /**
+     * 指定索引下的列包含指定集合里的数据内容
+     * @param index 列索引
+     * @param values 集合
+     * @param <E> 指定类型
+     * @return 新数据表
+     * */
+    public <E> TupleTable in(int index,Collection<E> values){
+        return filter(it-> values.contains(it.get(index)));
+    }
+
+    /**
+     * 指定指是否出现在当前行内
+     * @param value 集合
+     * @param <E> 指定类型
+     * @return 新数据表
+     * */
+    public <E> TupleTable inRow(E value){
+        return filter(it-> it.contains(value));
+    }
+
+    /**
+     * 指定索引下的列不包含指定集合里的数据内容
+     * @param index 列索引
+     * @param values 集合
+     * @param <E> 指定类型
+     * @return 新数据表
+     * */
+    public <E> TupleTable notIn(int index,Collection<E> values){
+        return filter(it->!values.contains(it.get(index)));
+    }
+
+    /**
+     * 指定索引下的列匹配表达式项
+     * @param index 列索引
+     * @param regex 表达式
+     * @return 新数据表
+     * */
+    public  TupleTable matches(int index,String regex){
+        return filter(it->Pattern.matches(regex,it.get(index).toString()));
+    }
+
+    /**
+     * 指定索引下的列不匹配表达式项
+     * @param index 列索引
+     * @param regex 表达式
+     * @return 新数据表
+     * */
+    public  TupleTable notMatches(int index,String regex){
+        return filter(it->!Pattern.matches(regex,it.get(index).toString()));
+    }
+
+    /**
+     * 指定索引下的列等于指定值
+     * @param index 列索引
+     * @param value 表达式
+     * @param <E> 指定类型
+     * @return 新数据表
+     * */
+    public <E> TupleTable eq(int index,E value){
+        return filter(it->Objects.equals(it.get(index),value));
+    }
+
+    /**
+     * 当前列为空
+     * @param index 列索引
+     * @return 新数据表
+     * */
+    public TupleTable empty(int index){
+        return filter(it->Objects.isNull(it.get(index)));
+    }
+
+    /**
+     * 当前列为空或空白
+     * @param index 列索引
+     * @return 新数据表
+     * */
+    public TupleTable emptyOrBlank(int index){
+        return filter(it-> Objects.isNull(it.get(index))||Objects.equals(it.get(index),""));
+    }
+
+    public <U> List<U> distinctColumBy(int index){
+        return this.dataStream().map(it->(U)it.get(index)).distinct().collect(toList());
+    }
+
+
+    public long distinctCountColumBy(int index){
+        return this.dataStream().map(it->it.get(index)).distinct().count();
+    }
+
+    public TupleTable sortedBy(int index){
+        TupleList<Tuple> tl = this.dataStream().sorted(Comparator.comparing(it->{return it.get(index);})).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl);
+        return temp;
+    }
+
+    public TupleTable reversedBy(int index){
+        TupleList<Tuple> tl = this.dataStream().sorted(Comparator.comparing(it->{return it.get(index);})).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl.reversed());
+        return temp;
+    }
+
+
+    public <E> TupleTable sortedBy(Function<? super Tuple,E> function,Comparator<? super E> comparator){
+        TupleList<Tuple> tl = this.dataStream().sorted(Comparator.comparing(function,comparator)).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl);
+        return temp;
+    }
+
+    public <E> TupleTable reversedBy(Function<? super Tuple,E> function,Comparator<? super E> comparator){
+        TupleList<Tuple> tl = this.dataStream().sorted(Comparator.comparing(function,comparator)).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl.reversed());
+        return temp;
+    }
+
+    public TupleTable limit(int limit){
+        TupleList<Tuple> tl = this.dataStream().limit(limit).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl.reversed());
+        return temp;
+    }
+
+    public TupleTable limit(int limit,int offset){
+        TupleList<Tuple> tl = this.dataStream().skip(offset).limit(limit).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl.reversed());
+        return temp;
+    }
+
+
+
+
 
     /**
      * 描述表
@@ -169,6 +332,9 @@ public class TupleTable {
      * @param yTrans 列转换器
      * @param vTrans 值转换器
      * @param <T> tuple子类
+     * @param <R> tuple子类
+     * @param <V> 值对象泛型
+     * @return 返回透视表
      * */
     public <T extends Tuple,R extends Tuple,V> TuplePivotTable toTuplePivotTable(TupleTable table, Function<T,R> xTrans, Function<T,R> yTrans, Function<T,V> vTrans){
         TuplePivotTable tpt = new TuplePivotTable();
@@ -182,15 +348,15 @@ public class TupleTable {
      * 将透视表，转成默认列表
      *
      * 默认将行标头、列表头及数据串联
-     *
-     * @return
+     * @param tuplePivotTable 透视表对象
+     * @return 返回列表
      * */
     public static TupleTable transTupleTable(TuplePivotTable tuplePivotTable){
         TupleTable tt = new TupleTable();
 
         tuplePivotTable.dataStream().forEach(it->{
             Table.Cell<Tuple,Tuple,Object> value = (Table.Cell<Tuple,Tuple,Object>)it;
-            List<Object> temp = Streams.concat(value.getRowKey().stream(),value.getColumnKey().stream()).collect(Collectors.toList());
+            List<Object> temp = Streams.concat(value.getRowKey().stream(),value.getColumnKey().stream()).collect(toList());
             temp.add(value.getValue());
             tt.addARow(Tuples.tuple(temp.toArray()));
         });

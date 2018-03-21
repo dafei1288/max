@@ -62,7 +62,7 @@ public class TuplePivotTable {
 
     /**
      * 获取数据对象流
-     * @return
+     * @return 对象流
      * */
     public Stream dataStream(){
         return this.datas.cellSet().stream();
@@ -70,7 +70,7 @@ public class TuplePivotTable {
 
     /**
      * 遍历数据对象
-     * @param action
+     * @param action 集合操作
      * */
     public void forEach(Consumer action){
         this.datas.cellSet().stream().forEach(action);
@@ -82,7 +82,7 @@ public class TuplePivotTable {
      * 根据元数据自动截取对象，拼接成行标头及列表头
      *
      * @param keys 表头对象
-     * @return
+     * @return 值
      * */
     public Object getValue(Object...keys){
         Object[] xs = Arrays.copyOfRange(keys,0,this.dimXCount());
@@ -101,7 +101,7 @@ public class TuplePivotTable {
      * 获取值
      * @param x 行表头
      * @param y 列表头
-     * @return
+     * @return 值
      * */
     public Object getValue(Tuple x,Tuple y){
         return this.datas.get(x,y);
@@ -109,7 +109,7 @@ public class TuplePivotTable {
 
     /**
      * 列表头计数
-     * @return
+     * @return 计数
      * */
     public int dimXCount(){
         return this.datas.columnKeySet().stream().findFirst().get().size();
@@ -117,7 +117,7 @@ public class TuplePivotTable {
 
     /**
      * 行表头计数
-     * @return
+     * @return 计数
      * */
     public int dimYCount(){
         return this.datas.rowKeySet().stream().findFirst().get().size();
@@ -150,7 +150,9 @@ public class TuplePivotTable {
      * @param yTrans 列转换器
      * @param vTrans 值转换器
      * @param <T> tuple子类
-     *
+     * @param <R> tuple子类
+     * @param <V> 对象泛型
+     * @return 透视表
      * */
     public static <T extends Tuple,R extends Tuple,V> TuplePivotTable transPivotTable(TupleTable table,Function<T,R> xTrans,Function<T,R> yTrans,Function<T,V> vTrans){
         TuplePivotTable tpt = new TuplePivotTable();
@@ -165,7 +167,7 @@ public class TuplePivotTable {
      *
      * 默认将行标头、列表头及数据串联
      *
-     * @return
+     * @return 返回列表
      * */
     public TupleTable toTupleTable(){
         TupleTable tt = new TupleTable();

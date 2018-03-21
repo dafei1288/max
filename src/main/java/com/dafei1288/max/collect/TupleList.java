@@ -7,6 +7,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toCollection;
+
 
 /**
  * Tuple的集合类
@@ -25,6 +27,7 @@ public class TupleList<T extends Tuple> extends ArrayList {
     /**
      * 根据索引获取元组内指定索引值得集合
      * @param i 索引
+     * @param <E> 元素泛型
      * @return 列表
      * */
     public <E> List<E> getListWithIndex(int i){
@@ -35,10 +38,17 @@ public class TupleList<T extends Tuple> extends ArrayList {
     /**
      * 根据函数将元组值转换后形成列表
      * @param fun 函数
+     * @param <E> 元素泛型
      * @return 列表
      * */
     public <E> List<E> getListWithFun(Function<T, E> fun){
         return (List<E>) this.stream().map(fun).collect(Collectors.toList());
+    }
+
+
+    public TupleList<T> reversed(){
+        return IntStream.range(0, this.size()).mapToObj(i -> (T)this.get(this.size() - i - 1)).collect(toCollection(TupleList::new));
+
     }
 
 
@@ -47,7 +57,7 @@ public class TupleList<T extends Tuple> extends ArrayList {
      * @param lists 添加元素列
      * @param <E> 元素泛型
      *
-     * @return
+     * @return 新元组
      *
      * */
     public <E> TupleList<T> addElements(List<E> lists) throws RuntimeException {
@@ -68,7 +78,7 @@ public class TupleList<T extends Tuple> extends ArrayList {
      * @param defaultValue 默认元素
      * @param <E> 元素泛型
      *
-     * @return
+     * @return 新元组
      *
      * */
     public <E> TupleList<T> addElements(List<E> lists, E defaultValue){

@@ -25,7 +25,7 @@ public class CollectOperator {
      *  @param list
      *     操作集合
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<?> toUpperCaseExcludeNull(Collection<?> list){
         return toUpperCase(removeNullElement(list),"");
@@ -38,7 +38,7 @@ public class CollectOperator {
      *     操作集合
      *  @param defaultValue
      *      默认值
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<?> toUpperCase(Collection<?> list,Object defaultValue){
         return list
@@ -57,7 +57,7 @@ public class CollectOperator {
      *  @param list
      *     操作集合
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<?> toUpperCase(Collection<?> list){
         return toUpperCase(list,"");
@@ -67,7 +67,7 @@ public class CollectOperator {
      * 将集合中的空值去掉
      * @param list
      *     操作集合
-     * @return
+     * @return 新集合
      * */
     public static Collection<?> removeNullElement(Collection<?> list){
         return list.stream().filter(it->it!=null).collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class CollectOperator {
      *  去掉空值，并全部转换成小写字母
      *  @param list
      *     操作集合
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<?> toLowerCaseExcludeNull(Collection<?> list){
         return toUpperCase(removeNullElement(list),"");
@@ -91,7 +91,7 @@ public class CollectOperator {
      *  @param defaultValue
      *     默认值
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<?> toLowerCase(Collection<?> list,Object defaultValue){
         return list
@@ -109,7 +109,7 @@ public class CollectOperator {
      *  并全部转换成小写字母，空值以空字符串代替
      *  @param list
      *     操作集合
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<?> toLowerCase(Collection<?> list){
         return toLowerCase(list,"");
@@ -218,8 +218,9 @@ public class CollectOperator {
      *  作为值
      * @param fillEmpty
      *  是否以空值填充键队列
-     *
-     *  @return
+     * @param <K> 元素泛型
+     * @param <V> 元素泛型
+     *  @return 新集合
      * */
     public static <K,V> Map<K,V> mergeToMap(Collection<K> key,Collection<V> value,Boolean fillEmpty){
         HashMap<K,V> mapper = new HashMap<>();
@@ -244,8 +245,9 @@ public class CollectOperator {
      *  作为键
      * @param value
      *  作为值
-     *
-     *  @return
+     * @param <K> 元素泛型
+     * @param <V> 元素泛型
+     *  @return 新集合
      * */
     public static <K,V> Map<K,V> mergeToMap(Collection<K> key,Collection<V> value){
         return mergeToMap(key,value,false);
@@ -257,8 +259,9 @@ public class CollectOperator {
      *  作为键
      * @param value
      *  作为值
-     *
-     *  @return
+     * @param <K> 元素泛型
+     * @param <V> 元素泛型
+     *  @return 新集合
      * */
     public static <K,V> Map<K,V> mergeToMapWithAllKeys(Collection<K> key,Collection<V> value){
         return mergeToMap(key,value,true);
@@ -269,8 +272,8 @@ public class CollectOperator {
      *
      * @param values
      *  要创建索引的集合
-     *
-     * @return
+     * @param <V> 元素泛型
+     * @return 新索引集合
      * */
     public static <V> Map<Integer,V> mergeToIndexMap(Collection<V> values){
         Collection<Integer> keys = createIntsWithRange(values.size());
@@ -282,7 +285,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Integer> createIntsWithRange(Integer count){
         return createIntsWithRange(0,1,count);
@@ -298,7 +301,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     * @return
+     * @return 新集合
      * */
     public static Collection<Integer> createIntsWithRange(Integer from,Integer setp,Integer count){
         Stream<Integer> natural = Stream.generate(new NaturalSupplier(from,setp));
@@ -310,7 +313,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Integer> createZeros(Integer count){
         return createIntsWithRange(0,0,count);
@@ -321,7 +324,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Integer> createOnes(Integer count){
         return createIntsWithRange(1,0,count);
@@ -333,7 +336,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Double> createRandoms(Integer count){
         Stream<Double> natural = Stream.generate(RandomSupplier.RANDOM_DOUBLE_SEED);
@@ -345,7 +348,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Integer> createRandomInts(Integer count){
         Stream<Integer> natural = Stream.generate(RandomSupplier.RANDOM_INT_SEED);
@@ -371,7 +374,7 @@ public class CollectOperator {
      * @param count
      *  计数器
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Boolean> createBooleans(Integer count){
         Stream<Boolean> natural = Stream.generate(RandomSupplier.RANDOM_BOOLEAN_SEED);
@@ -385,7 +388,7 @@ public class CollectOperator {
      * @param value
      *  默认值
      *
-     *  @return
+     *  @return 新集合
      * */
     public static Collection<Integer> createIntsWithDefaultValue(Integer count,Integer value){
         return createIntsWithRange(value,0,count);
@@ -399,8 +402,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
-     *
-     *  @return
+     * @param <T> 元素泛型
+     *  @return 新集合
      * */
     public static <T> Boolean everyOne(Collection<T> list, Predicate<T> predicate){
 ////        Boolean temp = Boolean.TRUE;
@@ -418,8 +421,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
-     *
-     *  @return
+     * @param <T> 元素泛型
+     *  @return 新集合
      * */
     public static <T> Boolean hasOne(Collection<T> list, Predicate<T> predicate){
         return list.stream().anyMatch(predicate);
@@ -432,8 +435,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
-     *
-     *  @return
+     * @param <T> 元素泛型
+     *  @return 布尔值
      * */
     public static <T> Boolean noOne(Collection<T> list, Predicate<T> predicate){
         return list.stream().noneMatch(predicate);
@@ -446,8 +449,8 @@ public class CollectOperator {
      *  操作集合
      * @param predicate
      *  表达式 类似 x-&gt; x &gt; 10
-     *
-     *  @return
+     * @param <T> 元素泛型
+     *  @return 新集合
      * */
     public static <T> Collection<T> everyFixTo(Collection<T> list, Predicate<T> predicate){
         return list.stream().filter(predicate).collect(Collectors.toList());
@@ -459,7 +462,9 @@ public class CollectOperator {
      *  操作集合
      * @param function
      *  表达式 类似 it -&gt; it.toLowerCase()
-     *  @return
+     * @param <T> 元素泛型
+     * @param <R> 元素泛型
+     *  @return 新集合
      * */
     public static <T,R> Collection<R> everyMapTo(Collection<T> list, Function<T,R> function){
         return list.stream().map(function).collect(Collectors.toList());
@@ -471,8 +476,9 @@ public class CollectOperator {
      *  操作集合
      * @param accumulator
      *  汇集算子
-     *
-     *  @return
+     * @param <T> 元素泛型
+     * @param <R> 元素泛型
+     *  @return 计算结果
      */
     public static <T,R> R everyReduceTo(Collection<T> list, BinaryOperator<R> accumulator){
         return list.stream().map(x->(R)x).reduce(accumulator).get();
@@ -486,8 +492,9 @@ public class CollectOperator {
      *  映射操作
      * @param accumulator
      *  汇集算子
-     *
-     *  @return
+     * @param <T> 元素泛型
+     * @param <R> 元素泛型
+     *  @return 计算结果
      */
     public static <T,R> R everyMapAndReduceTo(Collection<T> list, Function<T,R> function, BinaryOperator<R> accumulator){
         return list.stream().map(function).reduce(accumulator).get();
@@ -502,7 +509,9 @@ public class CollectOperator {
      *  过滤算子
      * @param function
      *  映射操作
-     * @return
+     * @param <T> 元素泛型
+     * @param <R> 元素泛型
+     * @return 新集合
      *
      */
     public static <T,R> Collection<R> everyFixThenMapTo(Collection<T> list, Predicate<T> predicate,Function<T,R> function){
@@ -519,7 +528,8 @@ public class CollectOperator {
      *  映射操作
      * @param accumulator
      *  汇集算子
-     *
+     * @param <T> 元素泛型
+     * @param <R> 元素泛型
      * @return
      *  映射结果
      */
@@ -530,6 +540,7 @@ public class CollectOperator {
     /**
      * 创建一个原始集合的反转集合
      * @param list 操作集合
+     * @param <T> 元素泛型
      * @return 反转后的新集合
      * */
     public static <T> Collection<T>  reverse(Collection<T> list){
@@ -546,6 +557,7 @@ public class CollectOperator {
     /**
      * 将集合去重，并返回新集合
      * @param list 操作集合
+     * @param <T> 元素泛型
      * @return 去重后集合
      * */
     public static <T> Collection<T> distinct(Collection<T> list){

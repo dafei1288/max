@@ -44,7 +44,7 @@ public final class Tuple1<A> extends Tuple {
      * @param e 元素
      * @param <E> 原型泛型
      *
-     * @return
+     * @return 返回新元组
      *
      * */
     @Override

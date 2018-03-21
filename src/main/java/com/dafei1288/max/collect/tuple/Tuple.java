@@ -272,7 +272,7 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
      * @param e 元素
      * @param <E> 原型泛型
      *
-     * @return
+     * @return 返回新元组
      *
      * */
     public abstract <E> Tuple addElement(E e);
