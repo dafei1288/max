@@ -153,4 +153,12 @@ public class TestTupleTable {
         t = tt.limit(2,1);
         t.discrib();
     }
+
+    @Test
+    public void testSelect(){
+        TupleTable t = tt.select(it->{
+            return Tuples.tuple(it.getInteger(0)*10,it.getString(1)+111);
+        });
+        t.discrib();
+    }
 }

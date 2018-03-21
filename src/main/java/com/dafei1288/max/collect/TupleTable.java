@@ -308,7 +308,11 @@ public class TupleTable {
         return temp;
     }
 
-
+    public <E> TupleTable select(Function<? super Tuple,E> function){
+        TupleList<Tuple> tl = this.dataStream().map(function).collect(toCollection(TupleList::new));
+        TupleTable temp = new TupleTable(tl.reversed());
+        return temp;
+    }
 
 
 
