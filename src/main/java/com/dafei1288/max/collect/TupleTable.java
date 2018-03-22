@@ -11,11 +11,11 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * 元组列表
@@ -296,12 +296,23 @@ public class TupleTable {
         return temp;
     }
 
+    /**
+     * 截取记录
+     * @param limit 截取记录条数
+     * @return 新集合
+     * */
     public TupleTable limit(int limit){
         TupleList<Tuple> tl = this.dataStream().limit(limit).collect(toCollection(TupleList::new));
         TupleTable temp = new TupleTable(tl.reversed());
         return temp;
     }
 
+    /**
+     * 偏移数条记录后，截取记录
+     * @param limit 截取记录条数
+     * @param offset 偏移量
+     * @return 新集合
+     * */
     public TupleTable limit(int limit,int offset){
         TupleList<Tuple> tl = this.dataStream().skip(offset).limit(limit).collect(toCollection(TupleList::new));
         TupleTable temp = new TupleTable(tl.reversed());
@@ -315,6 +326,51 @@ public class TupleTable {
     }
 
 
+    /**
+     * 分组聚合
+     * @param groupIndex 被分组列索引列表
+     * @return 键值对索引
+     * */
+    public Map<Tuple,List<Tuple>> groupBy(Integer...groupIndex){
+        return this.dataStream().collect(Collectors.groupingBy(it->{
+            return Tuples.tuple(
+                    Stream.of(groupIndex).map(index->it.get(index)).collect(Collectors.toList()).toArray()
+            );
+        }));
+    }
+
+    /**
+     * 将表数据进行聚合，仅聚合列
+     * @param aggColIndex 待聚合字段索引
+     * @param groupIndex 被聚合字段列表
+     * @return 新集合元素
+     * */
+    public Map<Tuple,Double> aggregateBy(Integer aggColIndex,Integer...groupIndex){
+        return this.dataStream().collect(Collectors.groupingBy(it->{
+            return Tuples.tuple(
+                    Stream.of(groupIndex).map(index->it.get(index)).collect(Collectors.toList()).toArray()
+            );
+        },summingDouble(it->it.getDouble(aggColIndex))));
+    }
+
+    /**
+     * 将表数据进行聚合，可聚合多列
+     * @param aggIndexs 待聚合字段索引列表
+     * @param groupIndexs 被聚合字段列表
+     * @return 新集合元素
+     * */
+    public  Map<Tuple,Tuple> aggregateMultiColumsBy(List<Integer> aggIndexs,List<Integer> groupIndexs){
+        return this.dataStream().collect(Collectors.groupingBy(it->{
+                    return Tuples.tuple(
+                            groupIndexs.stream().map(index-> it.get(index)).collect(Collectors.toList()).toArray()
+                    );
+                },Tuple.collectors(
+                    aggIndexs.stream().map(index->{
+                        return Collectors.summingDouble(a -> ((Tuple)a).getDouble(index));
+                    }).collect(Collectors.toList())
+                )
+        ));
+    }
 
     /**
      * 描述表

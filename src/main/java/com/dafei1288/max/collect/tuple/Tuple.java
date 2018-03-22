@@ -1,9 +1,12 @@
 package com.dafei1288.max.collect.tuple;
 
+import com.dafei1288.max.collect.Tuples;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -67,15 +70,15 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
     }
 
     public final String getString(final int pos) {
-        return (String) this.valueList.get(pos);
+        return this.valueList.get(pos).toString();
     }
 
     public final Integer getInteger(final int pos) {
-        return (Integer) this.valueList.get(pos);
+        return Integer.valueOf(this.valueList.get(pos).toString());
     }
 
     public final Double getDouble(final int pos) {
-        return (Double) this.valueList.get(pos);
+        return Double.valueOf(this.valueList.get(pos).toString()) ;
     }
 
     /**
@@ -276,4 +279,109 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
      *
      * */
     public abstract <E> Tuple addElement(E e);
+
+
+//    public static <T, A1, D1> Collector<T, Tuple1<A1>, Tuple1<D1>> collectors(
+//            Collector<? super T, A1, D1> collector1
+//    ) {
+//        return Collector.<T, Tuple1<A1>, Tuple1<D1>>of(
+//                () -> Tuples.tuple(
+//                        collector1.supplier().get()
+//                ),
+//                (a, t) -> {
+//                    collector1.accumulator().accept(a.get(0), t);
+//                },
+//                (a1, a2) -> Tuples.tuple(
+//                        collector1.combiner().apply(a1.get(0), a2.get(1))
+//                ),
+//                a -> Tuples.tuple(
+//                        collector1.finisher().apply(a.get(0))
+//                )
+//        );
+//    }
+//
+//    public static <T, A1, A2, D1, D2>
+//    Collector<T, Tuple2<A1, A2>, Tuple2<D1, D2>>
+//    collectors(
+//            Collector<T, A1, D1> collector1
+//            , Collector<T, A2, D2> collector2
+//    ) {
+//        return Collector.of(
+//                () -> Tuples.tuple(
+//                        collector1.supplier().get()
+//                        , collector2.supplier().get()
+//                ),
+//                (a, t) -> {
+//                    collector1.accumulator().accept(a.get(0), t);
+//                    collector2.accumulator().accept(a.get(1), t);
+//                },
+//                (a1, a2) -> Tuples.tuple(
+//                        collector1.combiner().apply(a1.get(0), a2.get(0))
+//                        , collector2.combiner().apply(a1.get(1), a2.get(1))
+//                ),
+//                a -> Tuples.tuple(
+//                        collector1.finisher().apply(a.get(0))
+//                        , collector2.finisher().apply(a.get(1))
+//                )
+//        );
+//    }
+
+//    public static <T, A1, A2,A3, D1, D2,D3>
+//    Collector<T, Tuple3<A1, A2,A3>, Tuple3<D1, D2,D3>>
+//    collectors(
+//            Collector<T, A1, D1> collector1
+//            , Collector<T, A2, D2> collector2
+//            , Collector<T, A3, D3> collector3
+//    ) {
+//        return Collector.of(
+//                () -> Tuples.tuple(
+//                        collector1.supplier().get()
+//                        , collector2.supplier().get()
+//                        , collector3.supplier().get()
+//                ),
+//                (a, t) -> {
+//                    collector1.accumulator().accept(a.get(0), t);
+//                    collector2.accumulator().accept(a.get(1), t);
+//                    collector3.accumulator().accept(a.get(2),t);
+//                },
+//                (a1, a2) -> Tuples.tuple(
+//                        collector1.combiner().apply(a1.get(0), a2.get(0))
+//                        , collector2.combiner().apply(a1.get(1), a2.get(1))
+//                        , collector3.combiner().apply(a1.get(2), a2.get(2))
+//                ),
+//                a -> Tuples.tuple(
+//                        collector1.finisher().apply(a.get(0))
+//                        , collector2.finisher().apply(a.get(1))
+//                        , collector3.finisher().apply(a.get(2))
+//                )
+//        );
+//    }
+
+    public static <T>
+    Collector<T, Tuple, Tuple>
+    collectors(
+            List<Collector> collectors
+    ) {
+//        List<Collector> alc = Arrays.asList(collectors);
+        return Collector.of(
+                () -> Tuples.tuple(
+                        collectors.stream().map(it->it.supplier().get()).collect(Collectors.toList()).toArray()
+                ),
+                (a, t) -> {
+                    IntStream.range(0,collectors.size()).forEach(index->{
+                        collectors.get(index).accumulator().accept(a.get(index),t);
+                    });
+                },
+                (a1, a2) -> Tuples.tuple(
+                        IntStream.range(0,collectors.size()).boxed().map(index->{
+                            return collectors.get(index).combiner().apply(a1.get(index),a2.get(index));
+                        }).collect(Collectors.toList()).toArray()
+                ),
+                a -> Tuples.tuple(
+                        IntStream.range(0,collectors.size()).boxed().map(index->{
+                            return collectors.get(index).finisher().apply(a.get(index));
+                        }).collect(Collectors.toList()).toArray()
+                )
+        );
+    }
 }

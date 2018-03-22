@@ -3,10 +3,14 @@ package com.dafei1288.max;
 import com.dafei1288.max.collect.tuple.Tuple;
 import com.dafei1288.max.collect.TupleTable;
 import com.dafei1288.max.collect.Tuples;
+import com.dafei1288.max.collect.tuple.Tuple3;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,7 +38,7 @@ public class TestTupleTable {
         Tuple r3 = Tuples.tuple(3,"王五",12200.00);
         Tuple r4 = Tuples.tuple(4,"赵六",9000.00);
         Tuple r5 = Tuples.tuple(5,"马七",21000.00);
-        Tuple r6 = Tuples.tuple(6,"马七",21000.00);
+        Tuple r6 = Tuples.tuple(5,"马七",21000.00);
 
         tt.addARow(r1);
         tt.addARow(r2);
@@ -160,5 +164,88 @@ public class TestTupleTable {
             return Tuples.tuple(it.getInteger(0)*10,it.getString(1)+111);
         });
         t.discrib();
+    }
+
+    @Test
+    public void testGroupBy(){
+        tt.groupBy(0,1).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+
+
+//        tt.dataStream().collect(Collectors.groupingBy(it->{
+//            return Tuples.tuple(it.getString(1),it.getInteger(0));
+//        })).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+
+        //t.discrib();
+    }
+
+//    @Test
+//    public void testCustAggregateBy(){
+////        tt.aggregateBy(2,0,1).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+////        System.out.println(Stream.of(Tuples.tuple("first", 50d, 7d), Tuples.tuple("first", 50d, 7d),
+////                Tuples.tuple("second", 51d, 8d), Tuples.tuple("second", 51d, 8d))
+////                .collect(Collectors.toMap(it->{return ((Tuple)it).get(0);},
+////                        ed -> new AbstractMap.SimpleEntry<>(((Tuple)ed).get(1), ((Tuple)ed).get(2)),
+////                        (left, right) -> {
+////                            double key = left.getKey() + right.getKey();
+////                            double value = left.getValue() + right.getValue();
+////                            return new AbstractMap.SimpleEntry<>(key, value);
+////                        }, HashMap::new)));
+//        tt.dataStream().collect(Collectors.groupingBy(it->{
+//                    return Tuples.tuple(
+//                            Stream.of(0,1).map(index->((Tuple)it).get(index)).collect(Collectors.toList()).toArray()
+//                    );
+//                },Tuple.collectors(
+//
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0))
+//                )
+//        )).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+//
+//        System.out.println();
+//        tt.dataStream().collect(Collectors.groupingBy(it->{
+//                    return Tuples.tuple(
+//                            Stream.of(0,1).map(index->((Tuple)it).get(index)).collect(Collectors.toList()).toArray()
+//                    );
+//                },Tuple.collectors(
+//
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(2))
+//                )
+//        )).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+//
+//        System.out.println();
+//        tt.dataStream().collect(Collectors.groupingBy(it->{
+//                    return Tuples.tuple(
+//                            Stream.of(0,1).map(index->((Tuple)it).get(index)).collect(Collectors.toList()).toArray()
+//                    );
+//                },Tuple.collectors(
+//
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(2)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(2))
+//                )
+//        )).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+//        System.out.println();
+//        tt.dataStream().collect(Collectors.groupingBy(it->{
+//                    return Tuples.tuple(
+//                            Stream.of(0,1).map(index->((Tuple)it).get(index)).collect(Collectors.toList()).toArray()
+//                    );
+//                },Tuple.collectors(
+//
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(2)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(2)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(0)),
+//                Collectors.summingDouble(a -> ((Tuple)a).getDouble(2))
+//                )
+//        )).forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+//    }
+
+    @Test
+    public void testAggregateBy(){
+        Map<Tuple,Tuple> mtt = tt.aggregateMultiColumsBy(Arrays.asList(0,2,0,2,0,2,0,2),Arrays.asList(0,1));
+        mtt.forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+
     }
 }
