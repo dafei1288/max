@@ -371,7 +371,9 @@ public class TupleTable {
                 )
         ));
     }
-
+    public  Map<Tuple,Tuple> aggregateMultiColumsAndHavingBy(List<Integer> aggIndexs,List<Integer> groupIndexs,Predicate<Map.Entry<? extends Tuple,? extends Tuple>> predicate){
+        return aggregateMultiColumsBy(aggIndexs,groupIndexs).entrySet().stream().filter(predicate).collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+    }
     /**
      * 描述表
      * */

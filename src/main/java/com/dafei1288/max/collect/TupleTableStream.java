@@ -8,7 +8,9 @@ import java.util.function.*;
 import java.util.regex.Pattern;
 import java.util.stream.*;
 
+import java.util.HashMap;
 import static java.util.stream.Collectors.summingDouble;
+import static java.util.stream.Collectors.toConcurrentMap;
 
 
 public class  TupleTableStream<T extends Tuple> implements Stream<T> {
@@ -488,7 +490,9 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
                 )
         ));
     }
-
+    public  Map<Tuple,Tuple> aggregateMultiColumsAndHavingBy(List<Integer> aggIndexs,List<Integer> groupIndexs,Predicate<Map.Entry<? extends Tuple,? extends Tuple>> predicate){
+        return aggregateMultiColumsBy(aggIndexs,groupIndexs).entrySet().stream().filter(predicate).collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+    }
     /**
      * 描述表
      * */
