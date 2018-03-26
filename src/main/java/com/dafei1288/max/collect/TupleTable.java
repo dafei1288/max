@@ -99,7 +99,7 @@ public class TupleTable {
      * @param <E> 对象泛型
      * @return 列数据
      * */
-    public <E> List<E> getColumByName(String colName){
+    @Deprecated public <E> List<E> getColumByName(String colName){
         Tuple t = cols.get(colName);
         Integer colIndex = t.get(0);
         return this.datas.getListWithIndex(colIndex);
