@@ -5,6 +5,8 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 
 repositories {
     maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
@@ -12,19 +14,18 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/com.google.guava/guava
+
     compile group: 'com.google.guava', name: 'guava', version: '24.0-jre'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.7.1'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.19'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
 }
 
-
-
-/*
-https://www.cnblogs.com/jiaoyiping/p/7045965.html
-
-gradle publishMavenPublicationToMavenRepository
 
 
 publishing {
@@ -34,23 +35,67 @@ publishing {
             artifactId project.name
             version project.version
             //若是war包，就写components.web,若是jar包，就写components.java
-            from components.web
+            from components.java
         }
     }
     repositories {
         maven {
 
             if (project.version.endsWith('-SNAPSHOT')) {
-                url = "快照版本的nexus仓库地址"
+                url = "https://oss.sonatype.org/content/repositories/snapshots"
             } else {
-                url = "release版本的仓库地址"
+                url = "https://oss.sonatype.org/content/repositories/snapshots"
             }
 
             credentials {
-                username 'nexus仓库用户名'
-                password 'nexus仓库密码'
+                username 'dafei1288'
+                password 'maliwen1288'
             }
         }
     }
 }
+
+//编译groovy代码时采用 UTF-8
+tasks.withType(GroovyCompile) {
+    groovyOptions.encoding = "MacRoman"
+}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+//fix 编码 GBK 的不可映射字符
+
+//如果生成javadoc出现编码问题添加
+javadoc {
+    options{
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "https://github.com/dafei1288/max"
+        title "Max 致力于协助初级开发者简单实用lambda表达式"
+    }
+}
+
+//参见Part 2， 为项目生成**.jar/**-javadoc.jar/**-sources.jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+/*
+http://ningandjiao.iteye.com/blog/1846441
+
+https://www.cnblogs.com/jiaoyiping/p/7045965.html
+
+gradle publishMavenPublicationToMavenRepository
+
 */
