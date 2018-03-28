@@ -1,232 +1,236 @@
 package com.dafei1288.max.collect;
 
-
 import com.dafei1288.max.collect.tuple.Tuple;
+import javafx.scene.control.Tab;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.Pattern;
 import java.util.stream.*;
 
-import java.util.HashMap;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingDouble;
-import static java.util.stream.Collectors.toConcurrentMap;
+
+public class TupleTableStream<T> implements TableStream<T> {
+    private final Stream<? extends T> stream;
+
+//    private final Supplier<TupleTableStream<T>> supplier;
 
 
-public class  TupleTableStream<T extends Tuple> implements Stream<T> {
-    private TupleList<T> delegate;
-
-    public TupleTableStream(Stream<T> datas) {
-        delegate = new TupleList<>();
-        datas.forEach(it->this.delegate.add(it));
+    TupleTableStream(Stream<? extends T> stream){
+        this.stream = stream.sequential();
+//        this.supplier = ()-> (TupleTableStream<T>)this
     }
 
-    public  TupleTableStream(TupleList<T> tupleList){
-        this.delegate = tupleList;
+
+
+    public Stream<T> stream(){
+        return (Stream<T>) this.stream;
     }
-    private void setDatas(TupleList<T> tupleList){
-        this.delegate = tupleList;
-    }
+
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
-        return delegate.stream().filter(predicate);
+        return TableStream.load(stream().filter(predicate));
     }
 
     @Override
-    public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
-        return delegate.stream().map(mapper);
+    public TableStream<T> where(Predicate<? super T> predicate) {
+        return TableStream.load(stream().filter(predicate));
+    }
+
+    @Override
+    public <R> TableStream<R> map(Function<? super T, ? extends R> mapper) {
+        return TableStream.load(stream().map(mapper));
     }
 
     @Override
     public IntStream mapToInt(ToIntFunction<? super T> mapper) {
-        return delegate.stream().mapToInt(mapper);
+        return stream().mapToInt(mapper);
     }
 
     @Override
     public LongStream mapToLong(ToLongFunction<? super T> mapper) {
-        return delegate.stream().mapToLong(mapper);
+        return stream().mapToLong(mapper);
     }
 
     @Override
     public DoubleStream mapToDouble(ToDoubleFunction<? super T> mapper) {
-        return delegate.stream().mapToDouble(mapper);
+        return stream().mapToDouble(mapper);
     }
 
     @Override
-    public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
-        return delegate.stream().flatMap(mapper);
+    public <R> TableStream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
+        return TableStream.load(stream().flatMap(mapper));
     }
 
     @Override
     public IntStream flatMapToInt(Function<? super T, ? extends IntStream> mapper) {
-        return delegate.stream().flatMapToInt(mapper);
+        return stream().flatMapToInt(mapper);
     }
 
     @Override
     public LongStream flatMapToLong(Function<? super T, ? extends LongStream> mapper) {
-        return delegate.stream().flatMapToLong(mapper);
+        return stream().flatMapToLong(mapper);
     }
 
     @Override
     public DoubleStream flatMapToDouble(Function<? super T, ? extends DoubleStream> mapper) {
-        return delegate.stream().flatMapToDouble(mapper);
+        return stream().flatMapToDouble(mapper);
     }
 
     @Override
-    public Stream<T> distinct() {
-        return delegate.stream().distinct();
+    public TableStream<T> distinct() {
+        return TableStream.load(stream().distinct());
     }
 
     @Override
-    public Stream<T> sorted() {
-        return delegate.stream().sorted();
+    public TableStream<T> sorted() {
+        return TableStream.load(stream().sorted());
     }
 
     @Override
-    public Stream<T> sorted(Comparator<? super T> comparator) {
-        return delegate.stream().sorted(comparator);
+    public TableStream<T> sorted(Comparator<? super T> comparator) {
+        return TableStream.load(stream().sorted(comparator));
     }
 
     @Override
-    public Stream<T> peek(Consumer<? super T> action) {
-        return delegate.stream().peek(action);
+    public TableStream<T> peek(Consumer<? super T> action) {
+        return TableStream.load(stream().peek(action));
     }
 
     @Override
-    public Stream<T> limit(long maxSize) {
-        return delegate.stream().limit(maxSize);
+    public TableStream<T> limit(long maxSize) {
+        return TableStream.load(stream().limit(maxSize));
     }
 
     @Override
-    public Stream<T> skip(long n) {
-        return delegate.stream().skip(n);
-    }
-
-    @Override
-    public void forEach(Consumer<? super T> action) {
-        delegate.stream().forEach(action);
+    public TableStream<T> skip(long n) {
+        return TableStream.load(stream().skip(n));
     }
 
     @Override
     public void forEachOrdered(Consumer<? super T> action) {
-        delegate.stream().forEachOrdered(action);
+        this.stream.forEachOrdered(action);
     }
 
     @Override
+    public void forEach(Consumer<? super T> action) {
+        this.stream().forEach(action);
+    }
+    @Override
     public Object[] toArray() {
-        return delegate.stream().toArray();
+        return this.stream().toArray();
     }
 
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
-        return (A[]) delegate.stream().toArray(generator);
+        return this.stream().toArray(generator);
     }
 
     @Override
     public T reduce(T identity, BinaryOperator<T> accumulator) {
-        return (T) delegate.stream().reduce(identity,accumulator);
+        return this.stream().reduce(identity, accumulator);
     }
 
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        return delegate.stream().reduce(accumulator);
+        return this.stream().reduce(accumulator);
     }
 
     @Override
     public <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
-        return (U) delegate.stream().reduce(identity,accumulator,combiner);
+        return this.stream().reduce(identity, accumulator, combiner);
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
-        return (R) delegate.stream().collect(supplier, accumulator, combiner);
+        return this.stream().collect(supplier, accumulator, combiner);
     }
 
     @Override
     public <R, A> R collect(Collector<? super T, A, R> collector) {
-        return (R) delegate.stream().collect(collector);
+        return this.stream().collect(collector);
     }
 
     @Override
     public Optional<T> min(Comparator<? super T> comparator) {
-        return delegate.stream().min(comparator);
+        return this.stream().min(comparator);
     }
 
     @Override
     public Optional<T> max(Comparator<? super T> comparator) {
-        return delegate.stream().max(comparator);
+        return this.stream().max(comparator);
     }
 
     @Override
     public long count() {
-        return delegate.stream().count();
+        return this.stream().count();
     }
 
     @Override
     public boolean anyMatch(Predicate<? super T> predicate) {
-        return delegate.stream().anyMatch(predicate);
+        return this.stream().anyMatch(predicate);
     }
 
     @Override
     public boolean allMatch(Predicate<? super T> predicate) {
-        return delegate.stream().allMatch(predicate);
+        return this.stream().allMatch(predicate);
     }
 
     @Override
     public boolean noneMatch(Predicate<? super T> predicate) {
-        return delegate.stream().noneMatch(predicate);
+        return this.stream().noneMatch(predicate);
     }
 
     @Override
     public Optional<T> findFirst() {
-        return delegate.stream().findFirst();
+        return this.stream().findFirst();
     }
 
     @Override
     public Optional<T> findAny() {
-        return delegate.stream().findAny();
+        return this.stream().findAny();
     }
 
     @Override
     public Iterator<T> iterator() {
-        return delegate.stream().iterator();
+        return this.stream().iterator();
     }
 
     @Override
     public Spliterator<T> spliterator() {
-        return delegate.stream().spliterator();
+        return this.stream().spliterator();
     }
 
     @Override
     public boolean isParallel() {
-        return delegate.stream().isParallel();
+        return this.stream().isParallel();
     }
 
     @Override
-    public Stream<T> sequential() {
-        return (Stream<T>) delegate.stream().sequential();
+    public TableStream<T> sequential() {
+        return TableStream.load(this.stream().sequential());
     }
 
     @Override
-    public Stream<T> parallel() {
-        return (Stream<T>) delegate.stream().parallel();
+    public TableStream<T> parallel() {
+        return TableStream.load(this.stream().parallel());
     }
 
     @Override
-    public Stream<T> unordered() {
-        return (Stream<T>) delegate.stream().unordered();
+    public TableStream<T> unordered() {
+        return TableStream.load(this.stream().unordered());
     }
 
     @Override
-    public Stream<T> onClose(Runnable closeHandler) {
-        return (Stream<T>) delegate.stream().onClose(closeHandler);
+    public TableStream<T> onClose(Runnable closeHandler) {
+        return TableStream.load(this.stream().onClose(closeHandler));
     }
 
     @Override
     public void close() {
-        delegate.stream().close();
+        stream().close();
     }
-
 
 
     /**
@@ -234,8 +238,9 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param i 行号
      * @return 行数据
      * */
-    public Tuple getRow(int i){
-        return (Tuple) this.delegate.get(i);
+    @Override
+    public T getRow(int i){
+        return (T)this.stream().skip(i).limit(1);
     }
 
     /**
@@ -244,18 +249,17 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param <E> 对象泛型
      * @return 列数据
      * */
+    @Override
     public <E> List<E> getColum(int i){
-        return this.delegate.getListWithIndex(i);
+        return this.stream().map(it->{
+            if(it instanceof Tuple){
+                return ((Tuple)it).get(i);
+            }else{
+                return (E)it;
+            }
+        }).collect(Collectors.toList());
     }
 
-    /**
-     * 获取行数据流
-     * @param <T> 对象泛型 Tuple子类
-     * @return 流
-     * */
-    public <T  extends Tuple> Stream<T> dataStream(){
-        return this.delegate.stream();
-    }
 
 
     /**
@@ -263,8 +267,10 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param otherTable 外表
      * @return 连接后表
      * */
-    public Stream<T> crossJoin(TupleTableStream<T> otherTable){
-        return this.delegate.stream().flatMap(currentRow->otherTable.map(otherRow->Tuples.combine((Tuple)currentRow, otherRow)));
+    @Override
+    public TableStream<? extends Tuple> crossJoin(TableStream<? extends Tuple> otherTable){
+        return TableStream.load(this.stream().flatMap(currentRow->otherTable.map(otherRow->Tuples.combine((Tuple)currentRow, otherRow))));
+
     }
 
     /**
@@ -273,10 +279,18 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param predicate 筛选器，匹配主外键对象
      * @return 连接后表
      * */
-    public Stream<? super Tuple> innerJoin(TupleTableStream<T> otherTable, Predicate<Tuple> predicate){
-        return this.delegate.stream().flatMap(currentRow->otherTable.dataStream().map(otherRow->Tuples.combine((Tuple) currentRow, otherRow))).filter(predicate);
-
+    @Override
+    public TableStream<? extends Tuple> innerJoin(TableStream<? extends Tuple> otherTable, Predicate<Tuple> predicate){
+        return TableStream.innerJoin((TableStream<? extends Tuple>) this,otherTable,predicate);
     }
+
+//    public Stream<? extends Tuple> innerJoin1(TableStream<? extends Tuple> otherTable, Predicate<Tuple> predicate){
+//        return
+//                this.stream().flatMap(currentRow->otherTable.stream().map(otherRow->Tuples.combine((Tuple) currentRow, (Tuple)otherRow))).filter(predicate);
+//                //.onClose(TableStreamUtils.closeAll(this,otherTable))
+//
+//    }
+
     /**
      * 左外连接
      * @param otherTable 外表
@@ -284,10 +298,16 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param rightKeyIndex 外表主键索引
      * @return 连接后表
      * */
-    public Stream<? super Tuple> leftOuterJoin(TupleTableStream<T> otherTable, int leftKeyIndex, int rightKeyIndex){
-        int esize = otherTable.dataStream().findFirst().get().size();
-        return this.dataStream().flatMap(currentRow->defaultIfEmpty(otherTable.dataStream().filter(otherRow->Objects.equals(currentRow.get(leftKeyIndex),otherRow.get(rightKeyIndex))),()->{return Tuples.createEmptyTuple(esize);}).map(otherRow->Tuples.combine(currentRow,otherRow)));
+    @Override
+    public TableStream<? extends Tuple> leftOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex){
+        int esize = otherTable.stream().findFirst().get().size();
+        return TableStream.load(
+                this.stream().flatMap(currentRow->
+                        defaultIfEmpty(
+                                otherTable.stream().filter(otherRow->Objects.equals(((Tuple)currentRow).get(leftKeyIndex),otherRow.get(rightKeyIndex))),()->{return Tuples.createEmptyTuple(esize);}
+                        ).map(otherRow->Tuples.combine(((Tuple)currentRow),otherRow)))
 
+        );
     }
     /**
      * 右外连接
@@ -296,8 +316,10 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param rightKeyIndex 外表主键索引
      * @return 连接后表
      * */
-    public Stream<? super Tuple> rightOuterJoin(TupleTableStream<T> otherTable, int leftKeyIndex, int rightKeyIndex){
-        return otherTable.leftOuterJoin(this,rightKeyIndex,leftKeyIndex);
+    @Override
+    public TableStream<? extends Tuple> rightOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex){
+        return otherTable.leftOuterJoin((TableStream<? extends Tuple>) this,rightKeyIndex,leftKeyIndex);
+
     }
 
     /**
@@ -305,8 +327,10 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param otherTable 外表
      * @return 拼接后新表
      * */
-    public Stream<? super Tuple> union(TupleTableStream<T> otherTable){
-        return Stream.concat(this.dataStream(),otherTable.dataStream());
+    @Override
+    public TableStream<? extends Tuple> union(TableStream<? extends Tuple> otherTable){
+        Stream st = Stream.concat(this.stream(), otherTable.stream());
+        return TableStream.load(st);
     }
 
 
@@ -319,8 +343,10 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param <E> 指定类型
      * @return 新数据表
      * */
-    public <E> Stream<? super Tuple> in(int index,Collection<E> values){
-        return this.delegate.stream().filter(it-> values.contains(((Tuple)it).get(index)));
+    @Override
+    public <E> TableStream<T> in(int index, Collection<E> values){
+        return TableStream.load(this.stream().filter(it-> values.contains(((Tuple)it).get(index))));
+
     }
 
     /**
@@ -329,8 +355,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param <E> 指定类型
      * @return 新数据表
      * */
-    public <E> Stream<? super Tuple> inRow(E value){
-        return this.delegate.stream().filter(it-> ((Tuple)it).contains(value));
+    @Override
+    public <E> TableStream<T> inRow(E value){
+        return TableStream.load(
+            this.stream().filter(it-> ((Tuple)it).contains(value))
+        );
     }
 
     /**
@@ -340,8 +369,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param <E> 指定类型
      * @return 新数据表
      * */
-    public <E> Stream<? super Tuple> notIn(int index,Collection<E> values){
-        return this.delegate.stream().filter(it->!values.contains(((Tuple)it).get(index)));
+    @Override
+    public <E> TableStream<T> notIn(int index, Collection<E> values){
+        return TableStream.load(
+            this.stream().filter(it->!values.contains(((Tuple)it).get(index)))
+        );
     }
 
     /**
@@ -350,8 +382,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param regex 表达式
      * @return 新数据表
      * */
-    public  Stream<? super Tuple> matches(int index,String regex){
-        return this.delegate.stream().filter(it-> Pattern.matches(regex,((Tuple)it).get(index).toString()));
+    @Override
+    public TableStream<T> matches(int index, String regex){
+        return TableStream.load(
+            this.stream().filter(it-> Pattern.matches(regex,((Tuple)it).get(index).toString()))
+        );
     }
 
     /**
@@ -360,8 +395,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param regex 表达式
      * @return 新数据表
      * */
-    public  Stream<? super Tuple> notMatches(int index,String regex){
-        return this.delegate.stream().filter(it->!Pattern.matches(regex,((Tuple)it).get(index).toString()));
+    @Override
+    public TableStream<T> notMatches(int index, String regex){
+        return TableStream.load(
+            this.stream().filter(it->!Pattern.matches(regex,((Tuple)it).get(index).toString()))
+        );
     }
 
     /**
@@ -371,8 +409,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param <E> 指定类型
      * @return 新数据表
      * */
-    public <E> Stream<? super Tuple> eq(int index,E value){
-        return this.delegate.stream().filter(it->Objects.equals(((Tuple)it).get(index),value));
+    @Override
+    public <E> TableStream<T> eq(int index, E value){
+        return TableStream.load(
+            this.stream().filter(it->Objects.equals(((Tuple)it).get(index),value))
+        );
     }
 
     /**
@@ -380,8 +421,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param index 列索引
      * @return 新数据表
      * */
-    public Stream<? super Tuple> empty(int index){
-        return this.delegate.stream().filter((it->Objects.isNull(((Tuple)it).get(index))));
+    @Override
+    public TableStream<T> empty(int index){
+        return TableStream.load(
+            this.stream().filter((it->Objects.isNull(((Tuple)it).get(index))))
+        );
     }
 
     /**
@@ -389,36 +433,75 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param index 列索引
      * @return 新数据表
      * */
-    public Stream<? super Tuple> emptyOrBlank(int index){
-        return this.delegate.stream().filter(it-> Objects.isNull(((Tuple)it).get(index))||Objects.equals(((Tuple)it).get(index),""));
+    @Override
+    public TableStream<T> emptyOrBlank(int index){
+        return TableStream.load(
+            this.stream().filter(it-> Objects.isNull(((Tuple)it).get(index))||Objects.equals(((Tuple)it).get(index),""))
+        );
+    }
+    @Override
+    public <U> TableStream<U> distinctColumBy(int index){
+        return TableStream.load(
+                this.stream().map(
+                        it->{
+                            if(it instanceof Tuple){
+                                return ((Tuple)it).get(index);
+                            }else{
+                                return (U)it;
+                            }
+                        }
+                ).distinct()
+        );
     }
 
-    public <U> Stream<U> distinctColumBy(int index){
-        return this.dataStream().map(it->(U)it.get(index)).distinct();
-    }
-
-
+    @Override
     public long distinctCountColumBy(int index){
-        return this.dataStream().map(it->it.get(index)).distinct().count();
+        return this.stream().map(it->{
+            if(it instanceof Tuple){
+                return ((Tuple)it).get(index);
+            }else{
+                return it;
+            }
+        }).distinct().count();
+    }
+    @Override
+    public  TableStream<T> sortedBy(int index){
+        return TableStream.load(
+                this.stream().sorted(Comparator.comparing(
+                        it->{
+                            if(it instanceof Tuple){
+                                return ((Tuple)it).get(index);
+                            }else{
+                                return index;
+                            }
+                        }))
+        );
+    }
+    @Override
+    public TableStream<T> reversedBy(int index){
+        return TableStream.load(
+            this.stream().sorted(Comparator.comparing(it->{
+                if(it instanceof Tuple){
+                    return ((Tuple)it).get(index);
+                }else{
+                    return index;
+                }
+            }))
+        );
+
     }
 
-    public Stream<? super Tuple> sortedBy(int index){
-        return this.dataStream().sorted(Comparator.comparing(it->{return it.get(index);}));
+    @Override
+    public <E> TableStream<T> sortedBy(Function<T, E> function, Comparator<E> comparator){
+        return TableStream.load(
+            this.stream().sorted(Comparator.comparing(function,comparator))
+        );
     }
-
-    public Stream<? super Tuple> reversedBy(int index){
-        return this.dataStream().sorted(Comparator.comparing(it->{return it.get(index);}));
-
-    }
-
-
-    public <E> Stream<? super Tuple> sortedBy(Function<? super Tuple,E> function,Comparator<? super E> comparator){
-        return this.dataStream().sorted(Comparator.comparing(function,comparator));
-    }
-
-    public <E> Stream<? super Tuple> reversedBy(Function<? super Tuple,E> function,Comparator<? super E> comparator){
-        return this.dataStream().sorted(Comparator.comparing(function,comparator));
-
+    @Override
+    public <E> TableStream<T> reversedBy(Function<T, E> function, Comparator<E> comparator){
+        return TableStream.load(
+                this.stream().sorted(Comparator.comparing(function,comparator))
+        );
     }
 
     /**
@@ -426,8 +509,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param limit 截取记录条数
      * @return 新集合
      * */
-    public Stream<? super Tuple> limit(int limit){
-        return this.dataStream().limit(limit);
+    @Override
+    public TableStream<T> limit(int limit){
+        return TableStream.load(
+            this.stream().limit(limit)
+        );
     }
 
     /**
@@ -436,12 +522,17 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param offset 偏移量
      * @return 新集合
      * */
-    public Stream<? super Tuple> limit(int limit,int offset){
-        return this.dataStream().skip(offset).limit(limit);
+    @Override
+    public TableStream<T> limit(int limit, int offset){
+        return TableStream.load(
+                this.stream().skip(offset).limit(limit)
+        );
     }
-
-    public <E> Stream<? super Tuple> select(Function<? super Tuple,E> function){
-        return this.dataStream().map(function);
+    @Override
+    public <R> TableStream<R> select(Function<T, R> mapper){
+        return TableStream.load(
+            this.stream().map(mapper)
+        );
     }
 
 
@@ -450,12 +541,14 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param groupIndex 被分组列索引列表
      * @return 键值对索引
      * */
-    public Map<Tuple,List<Tuple>> groupBy(Integer...groupIndex){
-        return this.dataStream().collect(Collectors.groupingBy(it->{
-            return Tuples.tuple(
-                    Stream.of(groupIndex).map(index->it.get(index)).collect(Collectors.toList()).toArray()
-            );
-        }));
+    @Override
+    public  Map<? extends Tuple,List<T>> groupBy(Integer... groupIndex){
+        return this.stream().collect(
+                groupingBy(it->{
+                    return Tuples.tuple(Stream.of(groupIndex).map(index->((Tuple)it).get(index)).collect(Collectors.toList()).toArray());
+                }
+            )
+        );
     }
 
     /**
@@ -464,12 +557,13 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param groupIndex 被聚合字段列表
      * @return 新集合元素
      * */
-    public Map<Tuple,Double> aggregateBy(Integer aggColIndex,Integer...groupIndex){
-        return this.dataStream().collect(Collectors.groupingBy(it->{
+    @Override
+    public Map<Tuple,Double> aggregateBy(Integer aggColIndex, Integer... groupIndex){
+        return this.stream().collect(Collectors.groupingBy(it->{
             return Tuples.tuple(
-                    Stream.of(groupIndex).map(index->it.get(index)).collect(Collectors.toList()).toArray()
+                    Stream.of(groupIndex).map(index->((Tuple)it).get(index)).collect(Collectors.toList()).toArray()
             );
-        },summingDouble(it->it.getDouble(aggColIndex))));
+        },summingDouble(it->((Tuple)it).getDouble(aggColIndex))));
     }
 
     /**
@@ -478,10 +572,11 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
      * @param groupIndexs 被聚合字段列表
      * @return 新集合元素
      * */
-    public  Map<Tuple,Tuple> aggregateMultiColumsBy(List<Integer> aggIndexs,List<Integer> groupIndexs){
-        return this.dataStream().collect(Collectors.groupingBy(it->{
+    @Override
+    public  Map<Tuple,Tuple> aggregateMultiColumsBy(List<Integer> aggIndexs, List<Integer> groupIndexs){
+        return this.stream().collect(Collectors.groupingBy(it->{
                     return Tuples.tuple(
-                            groupIndexs.stream().map(index-> it.get(index)).collect(Collectors.toList()).toArray()
+                            groupIndexs.stream().map(index-> ((Tuple)it).get(index)).collect(Collectors.toList()).toArray()
                     );
                 },Tuple.collectors(
                 aggIndexs.stream().map(index->{
@@ -490,20 +585,32 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
                 )
         ));
     }
-    public  Map<Tuple,Tuple> aggregateMultiColumsAndHavingBy(List<Integer> aggIndexs,List<Integer> groupIndexs,Predicate<Map.Entry<? extends Tuple,? extends Tuple>> predicate){
+
+    @Override
+    public  Map<Tuple,Tuple> aggregateMultiColumsAndHavingBy(List<Integer> aggIndexs, List<Integer> groupIndexs, Predicate<Map.Entry<? extends Tuple, ? extends Tuple>> predicate){
         return aggregateMultiColumsBy(aggIndexs,groupIndexs).entrySet().stream().filter(predicate).collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
     }
+
     /**
      * 描述表
      * */
+    @Override
     public void discrib(){
-        System.out.println("datas size : "+this.delegate.size());
-        delegate.stream().forEach(System.out::println);
+        System.out.println("datas size : "+this.stream().count());
+        this.stream().forEach(System.out::println);
         System.out.println("**********discrib end*************");
     }
 
-    private static <T extends Tuple> Stream<T> throwIfEmpty(Stream<T> stream) {
-        Iterator<T> iterator = stream.iterator();
+    @Override
+    public TableStream<T> subTable(long from, long to) {
+        return TableStream.load( this.stream().skip(from).limit(to));
+    }
+
+
+
+
+    private static  Stream<? extends Tuple> throwIfEmpty(Stream<? extends Tuple> stream) {
+        Iterator iterator = stream.iterator();
         if (iterator.hasNext()) {
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), false);
         } else {
@@ -511,12 +618,13 @@ public class  TupleTableStream<T extends Tuple> implements Stream<T> {
         }
     }
 
-    private static <T  extends Tuple> Stream<T> defaultIfEmpty(Stream<T> stream, com.google.common.base.Supplier<T> supplier) {
-        Iterator<T> iterator = stream.iterator();
+    private static Stream<? extends Tuple> defaultIfEmpty(Stream<? extends Tuple> stream, com.google.common.base.Supplier<? extends Tuple> supplier) {
+        Iterator iterator = stream.iterator();
         if (iterator.hasNext()) {
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), false);
         } else {
             return Stream.of(supplier.get());
         }
     }
+
 }

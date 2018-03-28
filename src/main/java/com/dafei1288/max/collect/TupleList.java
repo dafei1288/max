@@ -16,6 +16,12 @@ import static java.util.stream.Collectors.toCollection;
  * */
 public class TupleList<T extends Tuple> extends ArrayList {
 
+    public TableStream<Tuple> tableStream(){
+        return TableStream.load(this.stream());
+    }
+
+
+
     public TupleList(){
         super();
     }
@@ -96,5 +102,14 @@ public class TupleList<T extends Tuple> extends ArrayList {
             tuples.add(t);
         });
         return tuples;
+    }
+
+    public TupleList subTupleList(int from , int to){
+        TupleList tl = new TupleList();
+
+        for(Object tuple: this.subList(from,to) ){
+            tl.add(tuple);
+        }
+        return tl;
     }
 }
