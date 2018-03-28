@@ -1,7 +1,7 @@
 package com.dafei1288.max.collect;
 
 import com.dafei1288.max.collect.tuple.Tuple;
-import javafx.scene.control.Tab;
+
 
 import java.util.*;
 import java.util.function.*;
@@ -14,15 +14,9 @@ import static java.util.stream.Collectors.summingDouble;
 public class TupleTableStream<T> implements TableStream<T> {
     private final Stream<? extends T> stream;
 
-//    private final Supplier<TupleTableStream<T>> supplier;
-
-
     TupleTableStream(Stream<? extends T> stream){
         this.stream = stream.sequential();
-//        this.supplier = ()-> (TupleTableStream<T>)this
     }
-
-
 
     public Stream<T> stream(){
         return (Stream<T>) this.stream;
