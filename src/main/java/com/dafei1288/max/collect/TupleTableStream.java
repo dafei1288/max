@@ -254,8 +254,6 @@ public class TupleTableStream<T> implements TableStream<T> {
         }).collect(Collectors.toList());
     }
 
-
-
     /**
      * 全外连接
      * @param otherTable 外表
@@ -278,12 +276,6 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.innerJoin((TableStream<? extends Tuple>) this,otherTable,predicate);
     }
 
-//    public Stream<? extends Tuple> innerJoin1(TableStream<? extends Tuple> otherTable, Predicate<Tuple> predicate){
-//        return
-//                this.stream().flatMap(currentRow->otherTable.stream().map(otherRow->Tuples.combine((Tuple) currentRow, (Tuple)otherRow))).filter(predicate);
-//                //.onClose(TableStreamUtils.closeAll(this,otherTable))
-//
-//    }
 
     /**
      * 左外连接
@@ -294,14 +286,7 @@ public class TupleTableStream<T> implements TableStream<T> {
      * */
     @Override
     public TableStream<? extends Tuple> leftOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex){
-        int esize = otherTable.stream().findFirst().get().size();
-        return TableStream.load(
-                this.stream().flatMap(currentRow->
-                        defaultIfEmpty(
-                                otherTable.stream().filter(otherRow->Objects.equals(((Tuple)currentRow).get(leftKeyIndex),otherRow.get(rightKeyIndex))),()->{return Tuples.createEmptyTuple(esize);}
-                        ).map(otherRow->Tuples.combine(((Tuple)currentRow),otherRow)))
-
-        );
+        return TableStream.leftOuterJoin((TableStream<? extends Tuple>) this,otherTable,leftKeyIndex,rightKeyIndex);
     }
     /**
      * 右外连接
@@ -312,7 +297,7 @@ public class TupleTableStream<T> implements TableStream<T> {
      * */
     @Override
     public TableStream<? extends Tuple> rightOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex){
-        return otherTable.leftOuterJoin((TableStream<? extends Tuple>) this,rightKeyIndex,leftKeyIndex);
+        return TableStream.rightOuterJoin((TableStream<? extends Tuple>) this,otherTable,rightKeyIndex,leftKeyIndex);
 
     }
 
@@ -603,22 +588,6 @@ public class TupleTableStream<T> implements TableStream<T> {
 
 
 
-    private static  Stream<? extends Tuple> throwIfEmpty(Stream<? extends Tuple> stream) {
-        Iterator iterator = stream.iterator();
-        if (iterator.hasNext()) {
-            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), false);
-        } else {
-            throw new NoSuchElementException("empty stream");
-        }
-    }
 
-    private static Stream<? extends Tuple> defaultIfEmpty(Stream<? extends Tuple> stream, com.google.common.base.Supplier<? extends Tuple> supplier) {
-        Iterator iterator = stream.iterator();
-        if (iterator.hasNext()) {
-            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), false);
-        } else {
-            return Stream.of(supplier.get());
-        }
-    }
 
 }

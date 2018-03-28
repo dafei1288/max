@@ -67,4 +67,11 @@ public class TestTupleTableStream {
 
         tl.tableStream().innerJoin(rightTable,it->{return Objects.equals(((Tuple)it).get(1),((Tuple)it).get(13));}).forEach(System.out::println);
     }
+
+    @Test
+    public void testUnion(){
+        tl.tableStream().union(tl.tableStream()).forEach(System.out::println);
+        long count = tl.tableStream().union(tl.tableStream()).count();
+        System.out.println(count);
+    }
 }
