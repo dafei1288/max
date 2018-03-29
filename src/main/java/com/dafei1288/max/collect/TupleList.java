@@ -20,8 +20,6 @@ public class TupleList<T extends Tuple> extends ArrayList {
         return TableStream.load(this.stream());
     }
 
-
-
     public TupleList(){
         super();
     }
@@ -111,5 +109,20 @@ public class TupleList<T extends Tuple> extends ArrayList {
             tl.add(tuple);
         }
         return tl;
+    }
+
+
+    public T get(final int x,final int y){
+        return ((Tuple)this.get(x)).get(y);
+    }
+    public final String getString(final int x,final int y) {
+        return ((Tuple)this.get(x)).get(y).toString();
+    }
+
+    public final Integer getInteger(final int x,final int y) {
+        return Integer.valueOf(((Tuple)this.get(x)).get(y).toString());
+    }
+    public final Double getDouble(final int x,final int y) {
+        return Double.valueOf(((Tuple)this.get(x)).get(y).toString()) ;
     }
 }
