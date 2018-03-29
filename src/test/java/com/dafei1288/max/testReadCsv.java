@@ -5,6 +5,7 @@ import com.dafei1288.max.collect.TupleList;
 import com.dafei1288.max.collect.TupleTable;
 import com.dafei1288.max.collect.Tuples;
 import com.dafei1288.max.collect.tuple.Tuple;
+import com.dafei1288.max.data.CsvLoader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -67,5 +68,20 @@ public class testReadCsv {
 //        tl.tableStream().innerJoin(leftTable,it->{
 //            //System.out.println("1: "+it.get(1)+" 13: "+it.get(13));
 //            return Objects.equals(((Tuple)it).get(1),((Tuple)it).get(13));}).select(it->{return Tuples.tuple(((Tuple)it).get(0),((Tuple)it).get(1),((Tuple)it).get(2),((Tuple)it).get(14));}).forEach(System.out::println);
+    }
+
+    @Test
+    public void testCsvLoader(){
+        try {
+            TupleList<Tuple> rightList = new TupleList();
+            rightList.add(Tuples.tuple("0","死"));
+            rightList.add(Tuples.tuple("1","活"));
+
+            CsvLoader.loadDataToTableStream("src/test/resources/train.csv",",",true)
+                    .crossJoin(rightList)
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

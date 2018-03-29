@@ -21,17 +21,27 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
     @Override
     Spliterator<T> spliterator();
 
+    TupleList<? extends Tuple> toTupleList();
+
     T getRow(int i);
 
     <E> List<E> getColum(int i);
 
     TableStream<? extends Tuple> crossJoin(TableStream<? extends Tuple> otherTable);
 
+    TableStream<? extends Tuple> crossJoin(TupleList<? extends Tuple> otherTableList);
+
     TableStream<? extends Tuple> innerJoin(TableStream<? extends Tuple> otherTable, Predicate<Tuple> predicate);
+
+    TableStream<? extends Tuple> innerJoin(TupleList<? extends Tuple> otherTableList, Predicate<Tuple> predicate);
 
     TableStream<? extends Tuple> leftOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex);
 
+    TableStream<? extends Tuple> leftOuterJoin(TupleList<? extends Tuple> otherTableList, int leftKeyIndex, int rightKeyIndex);
+
     TableStream<? extends Tuple> rightOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex);
+
+    TableStream<? extends Tuple> rightOuterJoin(TupleList<? extends Tuple> otherTableList, int leftKeyIndex, int rightKeyIndex);
 
     TableStream<? extends Tuple> union(TableStream<? extends Tuple> otherTable);
 
@@ -82,6 +92,27 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
     TableStream<T> subTable(long from, long to);
 
 
+
+
+    static <T> TableStream<T> empty() {
+        return load(Stream.empty());
+    }
+
+    static <T> TableStream<T> generate(Supplier<? extends T> s) {
+        return load(Stream.generate(s));
+    }
+
+    static TableStream<Void> generate() {
+        return TableStream.generate(() -> null);
+    }
+
+    static <T> TableStream<T> generate(T value) {
+        return TableStream.generate(() -> value);
+    }
+
+
+
+
     static <T> TableStream<T> load(Stream<? extends T> stream) {
         if (stream == null) return TableStream.empty();
         if (stream instanceof TableStream) {
@@ -89,25 +120,6 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
         }
         return new TupleTableStream<T>(stream);
     }
-
-
-    static <T> TableStream<T> empty() {
-        return load(Stream.empty());
-    }
-
-    static TableStream<Void> generate() {
-        return generate(() -> null);
-    }
-
-    static <T> TableStream<T> generate(T value) {
-        return generate(() -> value);
-    }
-
-
-    static <T> TableStream<T> generate(Supplier<? extends T> s) {
-        return load(Stream.generate(s));
-    }
-
 
     static <T> TableStream<T> load(T[] values, int startIndex, int endIndex) {
         return load(Arrays.asList(values).subList(startIndex, endIndex));

@@ -226,7 +226,10 @@ public class TupleTableStream<T> implements TableStream<T> {
         stream().close();
     }
 
-
+    @Override
+    public TupleList<? extends Tuple> toTupleList(){
+        return this.collect(Collectors.toCollection(TupleList::new));
+    }
     /**
      * 根据行号获取数据
      * @param i 行号
@@ -261,10 +264,14 @@ public class TupleTableStream<T> implements TableStream<T> {
      * */
     @Override
     public TableStream<? extends Tuple> crossJoin(TableStream<? extends Tuple> otherTable){
-        return TableStream.load(this.stream().flatMap(currentRow->otherTable.map(otherRow->Tuples.combine((Tuple)currentRow, otherRow))));
+        return TableStream.crossJoin((TableStream<? extends Tuple>) this,otherTable);
+                //TableStream.load(this.stream().flatMap(currentRow->otherTable.map(otherRow->Tuples.combine((Tuple)currentRow, otherRow))));
 
     }
-
+    @Override
+    public TableStream<? extends Tuple> crossJoin(TupleList<? extends Tuple> otherTableList){
+        return TableStream.crossJoin((TupleList<Tuple>) this.toTupleList(),(TupleList<Tuple>)otherTableList);
+    }
     /**
      * 内连接
      * @param otherTable 外表
@@ -276,6 +283,16 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.innerJoin((TableStream<? extends Tuple>) this,otherTable,predicate);
     }
 
+    /**
+     * 内连接
+     * @param otherTableList 外表
+     * @param predicate 筛选器，匹配主外键对象
+     * @return 连接后表
+     * */
+    @Override
+    public TableStream<? extends Tuple> innerJoin(TupleList<? extends Tuple> otherTableList, Predicate<Tuple> predicate){
+        return TableStream.innerJoin((TupleList<Tuple>) this.toTupleList(),(TupleList<Tuple>)otherTableList,predicate);
+    }
 
     /**
      * 左外连接
@@ -288,6 +305,12 @@ public class TupleTableStream<T> implements TableStream<T> {
     public TableStream<? extends Tuple> leftOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex){
         return TableStream.leftOuterJoin((TableStream<? extends Tuple>) this,otherTable,leftKeyIndex,rightKeyIndex);
     }
+
+    @Override
+    public TableStream<? extends Tuple> leftOuterJoin(TupleList<? extends Tuple> otherTableList,  int leftKeyIndex, int rightKeyIndex){
+        return TableStream.leftOuterJoin((TupleList<Tuple>) this.toTupleList(),(TupleList<Tuple>)otherTableList,leftKeyIndex,rightKeyIndex);
+    }
+
     /**
      * 右外连接
      * @param otherTable 外表
@@ -300,7 +323,10 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.rightOuterJoin((TableStream<? extends Tuple>) this,otherTable,rightKeyIndex,leftKeyIndex);
 
     }
-
+    @Override
+    public TableStream<? extends Tuple> rightOuterJoin(TupleList<? extends Tuple> otherTableList,  int leftKeyIndex, int rightKeyIndex){
+        return TableStream.rightOuterJoin((TupleList<Tuple>) this.toTupleList(),(TupleList<Tuple>)otherTableList,leftKeyIndex,rightKeyIndex);
+    }
     /**
      * 拼接两张数据表
      * @param otherTable 外表
