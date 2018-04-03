@@ -3,6 +3,8 @@ package com.dafei1288.max.collect;
 import com.dafei1288.max.collect.tuple.Tuple;
 
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.Pattern;
@@ -13,6 +15,7 @@ import static java.util.stream.Collectors.summingDouble;
 
 public class TupleTableStream<T> implements TableStream<T> {
     private final Stream<? extends T> stream;
+    private long startTimer = System.currentTimeMillis();
 
     TupleTableStream(Stream<? extends T> stream){
         this.stream = stream.sequential();
@@ -611,9 +614,25 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.load( this.stream().skip(from).limit(to));
     }
 
+    @Override
+    public TableStream<T> beginTrace() {
+        this.startTimer = System.currentTimeMillis();
+        return this;
+    }
 
-
-
-
+    @Override
+    public TableStream<T> trace() {
+        System.out.println("cost time "+(System.currentTimeMillis()-this.startTimer)+" (ms)");
+        return this;
+    }
+    @Override
+    public TableStream<T> trace(Writer writer) {
+        try {
+            writer.write("cost time "+(System.currentTimeMillis()-this.startTimer)+" (ms)");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
 
 }

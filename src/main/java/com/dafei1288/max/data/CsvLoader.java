@@ -1,11 +1,13 @@
 package com.dafei1288.max.data;
 
 import com.dafei1288.max.collect.TableStream;
+import com.dafei1288.max.collect.TupleList;
 import com.dafei1288.max.collect.Tuples;
 import com.dafei1288.max.collect.tuple.Tuple;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.io.File;
 import java.util.function.Function;
@@ -22,6 +24,11 @@ public class CsvLoader implements DataLoader{
     public static <R> List<R> loadData(File file,Function<String, R> mapper,Collector<R, ?, List<R>> collector) throws IOException {
         return Files.readAllLines(file.toPath()).stream().map(mapper).collect(collector);
     }
+
+    public static <R> TupleList loadDataToTupleListUseCollector(Path path,Function<String, R> mapper,Collector<R, ?, TupleList> collector) throws IOException {
+        return Files.readAllLines(path).stream().map(mapper).collect(collector);
+    }
+
     public static List<Tuple> loadData(File file,final String spilter) throws IOException {
         return loadData(file,spilter,false);
     }
@@ -48,5 +55,23 @@ public class CsvLoader implements DataLoader{
     public static TableStream<? extends Tuple> loadDataToTableStream(File file,final String spilter,final boolean includeHead) throws IOException{
         List<Tuple> temp = loadData(file,spilter,includeHead);
         return TableStream.load(temp);
+    }
+
+    public static TupleList<Tuple> loadDataToTupleList(String filename,final String spilter,final boolean includeHead) throws IOException{
+        return loadDataToTupleList(new File(filename),spilter,includeHead);
+    }
+    public static TupleList<Tuple> loadDataToTupleList(File file,final String spilter,final boolean includeHead) throws IOException{
+        return loadDataToTupleList(file.toPath(),spilter,includeHead);
+    }
+
+    public static TupleList<Tuple> loadDataToTupleList(Path path, final String spilter, final boolean includeHead) throws IOException{
+        TupleList<Tuple> temp = loadDataToTupleListUseCollector(path.toAbsolutePath(),it->{
+            return Tuples.tuple(it.split(spilter));
+        },Collectors.toCollection(TupleList::new));
+        if(includeHead){
+
+            return temp.subTupleList(HEADERLINE_NUMBER,temp.size());
+        }
+        return temp;
     }
 }

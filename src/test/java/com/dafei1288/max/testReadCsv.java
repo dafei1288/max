@@ -84,4 +84,46 @@ public class testReadCsv {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void testLoadBigData(){
+        try {
+            long start = System.currentTimeMillis();
+//            TableStream<Tuple> ts = (TableStream<Tuple>) CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false);
+            TupleList<Tuple> tl = CsvLoader.loadDataToTupleList("C:\\Users\\dafei\\Desktop\\rb.csv",",",false);
+            long cost = System.currentTimeMillis()-start;
+            System.out.println("load data = "+cost);
+
+            start = System.currentTimeMillis();
+            long count = tl.tableStream().count();
+            cost = System.currentTimeMillis()-start;
+            System.out.println("count = "+count+" , cost = "+cost);
+
+
+
+            start = System.currentTimeMillis();
+            Double agg = tl.tableStream().map(it-> it.getDouble(6)).reduce((a, b)->{return b+=a;}).get();
+            cost = System.currentTimeMillis()-start;
+            System.out.println("agg = "+agg+" , cost = "+cost);
+
+
+            tl.tableStream().beginTrace().innerJoin(tl,it->Objects.equals(it.get(0),it.get(7))).forEach(System.out::println);//.trace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testLoadBigData1(){
+        try {
+            long start = System.currentTimeMillis();
+            Double count = CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false).map(it-> it.getDouble(6)).reduce((a, b)->{return b+=a;}).get();
+            long cost = System.currentTimeMillis()-start;
+            System.out.print("sum = "+count+" , cost = "+cost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

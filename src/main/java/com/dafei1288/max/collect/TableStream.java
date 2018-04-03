@@ -2,6 +2,7 @@ package com.dafei1288.max.collect;
 
 import com.dafei1288.max.collect.tuple.Tuple;
 
+import java.io.Writer;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -10,6 +11,8 @@ import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 
 public interface TableStream<T> extends Stream<T>, Iterable<T> {
+
+
 
     Stream<T> stream();
 
@@ -91,8 +94,9 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
 
     TableStream<T> subTable(long from, long to);
 
-
-
+    TableStream<T> beginTrace();
+    TableStream<T> trace();
+    TableStream<T> trace(Writer writer);
 
     static <T> TableStream<T> empty() {
         return load(Stream.empty());
@@ -109,8 +113,6 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
     static <T> TableStream<T> generate(T value) {
         return TableStream.generate(() -> value);
     }
-
-
 
 
     static <T> TableStream<T> load(Stream<? extends T> stream) {
@@ -282,4 +284,6 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
             return Stream.of(supplier.get());
         }
     }
+
+
 }
