@@ -94,6 +94,10 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
 
     TableStream<T> subTable(long from, long to);
 
+    TableStream<? extends Tuple> trans(Map<Integer, Function> transTable);
+
+    TableStream<? extends Tuple> transFilter(Map<Integer, Function> transTable);
+
     TableStream<T> beginTrace();
     TableStream<T> trace();
     TableStream<T> trace(Writer writer);

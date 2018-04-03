@@ -3,7 +3,7 @@ package com.dafei1288.max;
 import com.dafei1288.max.collect.tuple.Tuple;
 import com.dafei1288.max.collect.TupleList;
 import com.dafei1288.max.collect.Tuples;
-import com.dafei1288.max.lambda.function.Functors;
+import com.dafei1288.max.lambda.function.Functions;
 import com.dafei1288.max.lambda.CollectOperator;
 import org.junit.Test;
 
@@ -81,7 +81,7 @@ public class testMergeMap {
         System.out.println(g11);
 
 
-        G7.stream().map(Functors.LOWER_CASE_FUNCTOR).forEach(System.out::println);
+        G7.stream().map(Functions.LOWER_CASE_FUNCTOR).forEach(System.out::println);
 
 
         Collection<Integer> evet = CollectOperator.createRandomInts(10);
@@ -104,7 +104,7 @@ public class testMergeMap {
         System.out.println(evet);
         System.out.println(fixs);
 
-        Collection<String> fixss = CollectOperator.everyFixTo(G7,it -> it.toString().contains("a")||it.toString().contains("A"));
+        Collection<String> fixss = CollectOperator.everyFixTo(G7,it -> it.contains("a")|| it.contains("A"));
         System.out.println(G7);
         System.out.println(fixss);
 

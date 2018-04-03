@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -79,6 +80,31 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
 
     public final Double getDouble(final int pos) {
         return Double.valueOf(this.valueList.get(pos).toString()) ;
+    }
+
+
+    public  final <T,R> R getByFunction(final int pos, Function<T,R> function){
+        return function.apply((T)this.valueList.get(pos));
+    }
+
+    public final Tuple trans(Map<Integer,Function> transTable){
+        List objs = IntStream.range(0,this.valueList.size()).boxed().map(index ->{
+                    if(transTable.get(index)!=null){
+                        return transTable.get(index).apply(this.valueList.get(index));
+                    }else{
+                        return this.valueList.get(index);
+                    }
+                }
+        ).collect(Collectors.toList());
+        return Tuples.tuple(objs.toArray());
+    }
+
+
+    public final Tuple transFilter(Map<Integer,Function> transTable){
+        Object[] objs = transTable.keySet().stream().map(key->{
+            return transTable.get(key).apply(this.valueList.get(key));
+        }).toArray();
+        return Tuples.tuple(objs);
     }
 
     /**

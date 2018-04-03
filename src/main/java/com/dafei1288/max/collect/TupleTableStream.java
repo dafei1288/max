@@ -614,6 +614,21 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.load( this.stream().skip(from).limit(to));
     }
 
+
+    @Override
+    public TableStream<? extends Tuple> trans(Map<Integer, Function> transTable){
+        return TableStream.load(this.stream().map(it->{
+            return ((Tuple)it).trans(transTable);
+        }));
+    }
+
+    @Override
+    public TableStream<? extends Tuple> transFilter(Map<Integer, Function> transTable){
+        return TableStream.load(this.stream().map(it->{
+            return ((Tuple)it).transFilter(transTable);
+        }));
+    }
+
     @Override
     public TableStream<T> beginTrace() {
         this.startTimer = System.currentTimeMillis();

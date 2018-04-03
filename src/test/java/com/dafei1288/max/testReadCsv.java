@@ -2,10 +2,10 @@ package com.dafei1288.max;
 
 import com.dafei1288.max.collect.TableStream;
 import com.dafei1288.max.collect.TupleList;
-import com.dafei1288.max.collect.TupleTable;
 import com.dafei1288.max.collect.Tuples;
 import com.dafei1288.max.collect.tuple.Tuple;
 import com.dafei1288.max.data.CsvLoader;
+import com.dafei1288.max.lambda.function.Functions;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Hashtable;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class testReadCsv {
     public static TableStream<Tuple> tts;
@@ -85,6 +87,30 @@ public class testReadCsv {
         }
     }
 
+    @Test
+    public void testTrans(){
+        Function<String,Integer> a0 = (x)->(Integer.parseInt(x)+1);
+        Function<String,String> a3 = x->"aaaa";
+
+
+        Hashtable<Integer,Function> tansTable = new Hashtable<>();
+        tansTable.put(0,a0);
+        tansTable.put(3,a3);
+
+        try {
+
+            CsvLoader.loadDataToTableStream("src/test/resources/train.csv",",",true).map(it->{
+                    return it.trans(tansTable);
+            }).forEach(System.out::println);
+
+            CsvLoader.loadDataToTableStream("src/test/resources/train.csv",",",true).transFilter(tansTable).forEach(System.out::println);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Test
     public void testLoadBigData(){
@@ -122,6 +148,15 @@ public class testReadCsv {
             Double count = CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false).map(it-> it.getDouble(6)).reduce((a, b)->{return b+=a;}).get();
             long cost = System.currentTimeMillis()-start;
             System.out.print("sum = "+count+" , cost = "+cost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFunction(){
+        try {
+            CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false).map(it-> it.getDouble(6)).map(Functions.MathFunc.COS).forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
