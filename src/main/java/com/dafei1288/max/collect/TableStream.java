@@ -26,6 +26,9 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
 
     TupleList<? extends Tuple> toTupleList();
 
+    TupleList<? extends Tuple> head(int i);
+    TupleList<? extends Tuple> tail(int i);
+
     T getRow(int i);
 
     <E> List<E> getColum(int i);
@@ -79,6 +82,7 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
     TableStream<T> limit(int limit);
 
     TableStream<T> limit(int limit, int offset);
+
 
     <R> TableStream<R> select(Function<T, R> mapper);
 
@@ -270,6 +274,20 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
         return TableStream.load(Stream.concat(leftList.tableStream(),rightList.tableStream()));
     }
 
+
+
+    static TableStream<? extends Tuple> trans(TableStream<? extends Tuple> tableStream,Map<Integer, Function> transTable){
+        return TableStream.load(tableStream.map(it->{
+            return it.trans(transTable);
+        }));
+    }
+
+
+    static TableStream<? extends Tuple> transFilter(TableStream<? extends Tuple> tableStream,Map<Integer, Function> transTable){
+        return TableStream.load(tableStream.map(it->{
+            return it.transFilter(transTable);
+        }));
+    }
 
     static  Stream<? extends Tuple> throwIfEmpty(Stream<? extends Tuple> stream) {
         Iterator iterator = stream.iterator();

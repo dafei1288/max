@@ -161,4 +161,20 @@ public class testReadCsv {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testHeadAndTail(){
+        try {
+
+            TupleList<Tuple> tl = CsvLoader.loadDataToTupleList("C:\\Users\\dafei\\Desktop\\rb.csv",",",false);
+
+            tl.tableStream().head(10).forEach(System.out::println);
+            System.out.println(".......");
+            tl.tableStream().tail(10).forEach(System.out::println);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

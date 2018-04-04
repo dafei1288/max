@@ -111,6 +111,20 @@ public class TupleList<T extends Tuple> extends ArrayList {
         return tl;
     }
 
+    public TupleList head(int i){
+        TupleList tl = new TupleList();
+        for(Object tuple: this.subList(0,i) ){
+            tl.add(tuple);
+        }
+        return tl;
+    }
+    public TupleList tail(int i){
+        TupleList tl = new TupleList();
+        for(Object tuple: this.subList(this.size()-i,this.size()) ){
+            tl.add(tuple);
+        }
+        return tl;
+    }
 
     public T get(final int x,final int y){
         return ((Tuple)this.get(x)).get(y);

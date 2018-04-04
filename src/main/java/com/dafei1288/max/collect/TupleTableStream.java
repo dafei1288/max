@@ -233,6 +233,17 @@ public class TupleTableStream<T> implements TableStream<T> {
     public TupleList<? extends Tuple> toTupleList(){
         return this.collect(Collectors.toCollection(TupleList::new));
     }
+
+    @Override
+    public TupleList<? extends Tuple> head(int i){
+        return this.stream().limit(i).collect(Collectors.toCollection(TupleList::new));
+    }
+
+    @Override
+    public TupleList<? extends Tuple> tail(int i){
+        TupleList tl = this.toTupleList();
+        return tl.subTupleList(tl.size()-i,tl.size());
+    }
     /**
      * 根据行号获取数据
      * @param i 行号
