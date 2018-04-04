@@ -1,6 +1,7 @@
 package com.dafei1288.max.collect.tuple;
 
 import com.dafei1288.max.collect.Tuples;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -31,6 +32,43 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
         this.valueList = Arrays.asList(objects);
     }
 
+    public boolean isAllNumber(){
+        return this.valueList.stream().allMatch(it->NumberUtils.isDigits(it.toString()));
+    }
+
+    public boolean hasNumber(){
+        return this.valueList.stream().anyMatch(it->NumberUtils.isDigits(it.toString()));
+    }
+
+    public Optional<Double> maxToDouble(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createDouble(it.toString())).max(Comparator.naturalOrder());
+    }
+
+    public Optional<Double> minToDouble(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createDouble(it.toString())).min(Comparator.naturalOrder());
+    }
+    public Optional<Float> maxToFloat(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createFloat(it.toString())).max(Comparator.naturalOrder());
+    }
+
+    public Optional<Float> minToFloat(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createFloat(it.toString())).min(Comparator.naturalOrder());
+    }
+    public Optional<Integer> maxToInteger(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createInteger(it.toString())).max(Comparator.naturalOrder());
+    }
+
+    public Optional<Integer> minToInteger(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createInteger(it.toString())).min(Comparator.naturalOrder());
+    }
+
+    public Optional<Long> maxToLong(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createLong(it.toString())).max(Comparator.naturalOrder());
+    }
+
+    public Optional<Long> minToLong(){
+        return this.valueList.stream().filter(it->NumberUtils.isDigits(it.toString())).map(it->NumberUtils.createLong(it.toString())).min(Comparator.naturalOrder());
+    }
     /**
      * 将元组转换成列表
      *
