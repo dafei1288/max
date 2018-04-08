@@ -14,6 +14,55 @@
 
 > doing 
 
+# something new
+
+`TableStream` 用于创建类`表`结构，以`Tuple`为行信息记录数据，从而形成类似二维表结构， `TupleList`为扩展集合容器，推荐通过`tableStream()`获得流，以免出现流占用异常。
+data包主要功能提供加载数据的便捷工具类。
+
+举个栗子：
+
+```
+//加载CSV文件，
+//参数分别代表：CSV路径，分隔符，是否包含行标头
+TupleList<Tuple> tl = CsvLoader.loadDataToTupleList("C:\\Users\\dafei\\Desktop\\rb.csv",",",false);
+
+//显示前10条记录
+tl.tableStream().head(10).forEach(System.out::println);
+
+```
+
+再举个栗子：
+```
+        //创建列变换函数
+        Function<String,Integer> a0 = (x)->(Integer.parseInt(x)+1);
+        Function<String,String> a3 = x->"aaaa";
+        
+        //构建变换函数对应的索引列图
+        Hashtable<Integer,Function> tansTable = new Hashtable<>();
+        tansTable.put(0,a0);
+        tansTable.put(3,a3);
+        
+        CsvLoader.loadDataToTableStream("src/test/resources/train.csv",",",true).trans(tansTable).forEach(System.out::println);
+        //(2, 0, 3, aaaa,  Mr. Owen Harris", male, 22, 1, 0, A/5 21171, 7.25, , S)
+        //(3, 1, 1, aaaa,  Mrs. John Bradley (Florence Briggs Thayer)", female, 38, 1, 0, PC 17599, 71.2833, C85, C)
+        //(4, 1, 3, aaaa,  Miss. Laina", female, 26, 0, 0, STON/O2. 3101282, 7.925, , S)
+        
+        CsvLoader.loadDataToTableStream("src/test/resources/train.csv",",",true).transFilter(tansTable).forEach(System.out::println);
+        //(aaaa, 2)
+        //(aaaa, 3)
+        //(aaaa, 4)
+        
+```
+
+经典wordcount
+
+```
+    TableStream.load(Arrays.asList("jacky","tom","jacky","naccy","black","tom","tom")).mappedToKeyAndReduceCountBy(it->it).entrySet().forEach(System.out::println);
+    //tom=3
+    //black=1
+    //jacky=2
+    //naccy=1
+```
 
 # use case
 
@@ -67,6 +116,7 @@
         //结果：[5,6,7,8,9,10]
 ```
 
+
 # lambda know how
 
 在java8中的java.util.function包下预定义了大量函数式接口，典型的包含如下4类接口：
@@ -95,6 +145,7 @@
 - [ ] ~~表达式引擎~~
 - [x] TupleTable 及 TuplePivotTable 原型实现
 - [x] TupleTable 及 TuplePivotTable 特性演化（TupleTable 添加 内连接、全外连接、左外连接、右外连接）
+- [x] 添加 TableStream
 - [ ] 文档补全
 - [x] 添加doc
 - [x] 测试用例
@@ -104,10 +155,11 @@
 1. [java8新特性 lambda Stream map(函数式编程)[2]](http://blog.csdn.net/u014646662/article/details/52261511)
 1. [common-sql-clauses-and-their-equivalents-in-java-8-streams[3]](https://blog.jooq.org/2015/08/13/common-sql-clauses-and-their-equivalents-in-java-8-streams/)
 1. [how-translate-sql-group-and[4]](https://dzone.com/articles/how-translate-sql-group-and)
+
 # links
 
 1. [码云](https://gitee.com/dafei1288/max)
 
 1. [github](https://github.com/dafei1288/max)
 
-(update@2018/3/10)
+(update@2018/4/8)

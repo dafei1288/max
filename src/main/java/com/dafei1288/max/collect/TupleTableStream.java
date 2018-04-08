@@ -10,8 +10,9 @@ import java.util.function.*;
 import java.util.regex.Pattern;
 import java.util.stream.*;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingDouble;
+import static java.util.stream.Collectors.*;
+import java.util.AbstractMap;
+import static java.util.AbstractMap.SimpleEntry;
 
 public class TupleTableStream<T> implements TableStream<T> {
     private final Stream<? extends T> stream;
@@ -59,6 +60,14 @@ public class TupleTableStream<T> implements TableStream<T> {
     public <R> TableStream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
         return TableStream.load(stream().flatMap(mapper));
     }
+
+    @Override
+    public Map<String,Integer> mappedToKeyAndReduceCountBy(Function<T,String> mapperToList){
+        return stream().map(mapperToList).collect(groupingBy(Function.identity(),
+                collectingAndThen(counting(), Long::intValue)));
+    }
+
+
 
     @Override
     public IntStream flatMapToInt(Function<? super T, ? extends IntStream> mapper) {

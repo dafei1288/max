@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Objects;
 import java.util.function.Function;
@@ -177,4 +178,16 @@ public class testReadCsv {
         }
     }
 
+    @Test
+    public void testWordCount(){
+        try {
+            CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false)
+                    .mappedToKeyAndReduceCountBy(it->it.getString(3)).entrySet().forEach(System.out::println);
+                    //.reduce().forEach(System.out::println);
+
+            TableStream.load(Arrays.asList("jacky","tom","jacky","naccy","black","tom","tom")).mappedToKeyAndReduceCountBy(it->it).entrySet().forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

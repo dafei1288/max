@@ -15,8 +15,13 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
 
 
     Stream<T> stream();
+    <R> TableStream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
+
+
 
     TableStream<T> where(Predicate<? super T> predicate);
+
+    Map<String,Integer> mappedToKeyAndReduceCountBy(Function<T, String> mapperToList);
 
     @Override
     void forEach(Consumer<? super T> action);
