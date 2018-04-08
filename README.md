@@ -180,6 +180,8 @@ tl.tableStream().head(10).forEach(System.out::println);
 1. [java8新特性 lambda Stream map(函数式编程)[2]](http://blog.csdn.net/u014646662/article/details/52261511)
 1. [common-sql-clauses-and-their-equivalents-in-java-8-streams[3]](https://blog.jooq.org/2015/08/13/common-sql-clauses-and-their-equivalents-in-java-8-streams/)
 1. [how-translate-sql-group-and[4]](https://dzone.com/articles/how-translate-sql-group-and)
+1. [micro-benchmarking-with-jmh-measure-dont-guess[5]](https://antoniogoncalves.org/2015/01/15/micro-benchmarking-with-jmh-measure-dont-guess/)
+1. [introduction-jmh-profilers[6]](http://java-performance.info/introduction-jmh-profilers/)
 
 # links
 

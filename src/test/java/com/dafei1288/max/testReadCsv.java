@@ -8,6 +8,9 @@ import com.dafei1288.max.data.CsvLoader;
 import com.dafei1288.max.lambda.function.Functions;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -74,6 +77,7 @@ public class testReadCsv {
     }
 
     @Test
+    @Benchmark
     public void testCsvLoader(){
         try {
             TupleList<Tuple> rightList = new TupleList();
@@ -81,8 +85,8 @@ public class testReadCsv {
             rightList.add(Tuples.tuple("1","活"));
 
             CsvLoader.loadDataToTableStream("src/test/resources/train.csv",",",true)
-                    .crossJoin(rightList)
-                    .forEach(System.out::println);
+                    .crossJoin(rightList);
+                    //.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -114,6 +118,7 @@ public class testReadCsv {
 
 
     @Test
+
     public void testLoadBigData(){
         try {
             long start = System.currentTimeMillis();
@@ -135,7 +140,7 @@ public class testReadCsv {
             System.out.println("agg = "+agg+" , cost = "+cost);
 
 
-            tl.tableStream().beginTrace().innerJoin(tl,it->Objects.equals(it.get(0),it.get(7))).forEach(System.out::println);//.trace();
+            //tl.tableStream().beginTrace().innerJoin(tl,it->Objects.equals(it.get(0),it.get(7))).forEach(System.out::println);//.trace();
 
         } catch (IOException e) {
             e.printStackTrace();

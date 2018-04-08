@@ -20,6 +20,8 @@ import static java.util.stream.Collectors.*;
 /**
  * 元组列表
  * 利用元组实现列表
+ *
+ * 一般不推荐使用，由于每个方法都会即刻结算数据，所以一般在数据量不可控的情况下，<b>不推荐</b>使用。
  * */
 public class TupleTable {
     private HashMap<String,Tuple> cols;
