@@ -54,7 +54,7 @@ tl.tableStream().head(10).forEach(System.out::println);
         
 ```
 
-经典wordcount
+经典wordcount：
 
 ```
     TableStream.load(Arrays.asList("jacky","tom","jacky","naccy","black","tom","tom")).mappedToKeyAndReduceCountBy(it->it).entrySet().forEach(System.out::println);
@@ -62,6 +62,31 @@ tl.tableStream().head(10).forEach(System.out::println);
     //black=1
     //jacky=2
     //naccy=1
+```
+
+多列聚合：
+
+```
+    //数据
+    0,1,2 //列索引
+    1,"张三",3000.00
+    2,"李四",2400.00
+    3,"王五",12200.00
+    4,"赵六",9000.00
+    5,"马七",21000.00
+    5,"马七",21000.00
+    
+    //tt-> TupleList数据集合
+    //Arrays.asList(0,2,0,2,0,2,0,2) 测试重复聚合字段
+    //Arrays.asList(0,1) ID
+    Map<Tuple,Tuple> mtt = tt.aggregateMultiColumsBy(Arrays.asList(0,2,0,2,0,2,0,2),Arrays.asList(0,1));
+    mtt.forEach((k,v)->{System.out.println("k = "+k+" , v = "+v);});
+    
+    //k = (5, 马七) , v = (10.0, 42000.0, 10.0, 42000.0, 10.0, 42000.0, 10.0, 42000.0)
+    //k = (2, 李四) , v = (2.0, 2400.0, 2.0, 2400.0, 2.0, 2400.0, 2.0, 2400.0)
+    //k = (1, 张三) , v = (1.0, 3000.0, 1.0, 3000.0, 1.0, 3000.0, 1.0, 3000.0)
+    //k = (4, 赵六) , v = (4.0, 9000.0, 4.0, 9000.0, 4.0, 9000.0, 4.0, 9000.0)
+    //k = (3, 王五) , v = (3.0, 12200.0, 3.0, 12200.0, 3.0, 12200.0, 3.0, 12200.0)
 ```
 
 # use case

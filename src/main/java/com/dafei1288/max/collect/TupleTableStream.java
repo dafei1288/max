@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 import java.util.stream.*;
 
 import static java.util.stream.Collectors.*;
-import java.util.AbstractMap;
-import static java.util.AbstractMap.SimpleEntry;
 
 public class TupleTableStream<T> implements TableStream<T> {
     private final Stream<? extends T> stream;
@@ -62,9 +60,9 @@ public class TupleTableStream<T> implements TableStream<T> {
     }
 
     @Override
-    public Map<String,Integer> mappedToKeyAndReduceCountBy(Function<T,String> mapperToList){
+    public Map<String, Long> mappedToKeyAndReduceCountBy(Function<T, String> mapperToList){
         return stream().map(mapperToList).collect(groupingBy(Function.identity(),
-                collectingAndThen(counting(), Long::intValue)));
+                collectingAndThen(counting(), Long::longValue)));
     }
 
 

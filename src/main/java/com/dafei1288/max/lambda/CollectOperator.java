@@ -608,4 +608,10 @@ public class CollectOperator {
     public static <T,U extends Comparable<? super U>> Collection<T> sortedByFunc(Collection<T> list,Function<? super T, ? extends U> keyExtractor){
         return list.stream().sorted(Comparator.comparing(keyExtractor)).collect(Collectors.toList());
     }
+
+    public static <V> Map<V, Long> mapToFrequencies(final Collection<V> items){
+        return items.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }
 }

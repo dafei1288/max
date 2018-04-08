@@ -176,4 +176,17 @@ public class testMergeMap {
         System.out.println();
         t1l.stream().forEach(System.out::println);
     }
+
+    @Test
+    public void testMapToFrequencies(){
+        List<String> addCol = new ArrayList<>();
+        addCol.add("张三");
+        addCol.add("李四");
+        addCol.add("王五");
+        addCol.add("赵六");
+        addCol.add("赵六");
+        addCol.add("赵六");
+        addCol.add("赵六");
+        CollectOperator.mapToFrequencies(addCol).entrySet().forEach(System.out::println);
+    }
 }
