@@ -39,20 +39,5 @@ public class TestMath {
 
         }).forEach(System.out::println);
     }
-    @Test
-    public void testZb1(){
-        //tl.tableStream().forEach(System.out::println);
 
-        TableStream tsAgg = tl.tableStream().aggregateMultiColumsByToStream(Arrays.asList(2),Arrays.asList(0));//.forEach(System.out::println);
-
-        tl.tableStream().innerJoin(tsAgg).select(it->{
-
-            List<Object> temps = new ArrayList<>();
-            temps.add(((Tuple)it).get(0));
-            temps.add(((Tuple)it).get(1));
-            temps.add(((Tuple)it).getDouble(2)/((Tuple)it).getDouble(4));
-            return Tuples.tuple(temps.toArray());
-
-        }).forEach(System.out::println);
-    }
 }
