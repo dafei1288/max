@@ -139,4 +139,11 @@ public class TupleList<T extends Tuple> extends ArrayList {
     public final Double getDouble(final int x,final int y) {
         return Double.valueOf(((Tuple)this.get(x)).get(y).toString()) ;
     }
+
+    public int getTupleSize(){
+        Tuple t0 = (Tuple)this.get(0);
+        int firstIdIndex = 0;
+        if(t0!=null) firstIdIndex=t0.size();
+        return firstIdIndex;
+    }
 }

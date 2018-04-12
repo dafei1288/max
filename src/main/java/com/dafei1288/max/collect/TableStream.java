@@ -45,6 +45,20 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
     TableStream<? extends Tuple> innerJoin(TableStream<? extends Tuple> otherTable, Predicate<Tuple> predicate);
 
     TableStream<? extends Tuple> innerJoin(TupleList<? extends Tuple> otherTableList, Predicate<Tuple> predicate);
+//    /**
+//     * 内连接
+//     * 默认将两个流的首字段拼接
+//     * @param otherTable 外表
+//     * @return 流
+//     * */
+//    TableStream<? extends Tuple> innerJoin(TableStream<? extends Tuple> otherTable);
+//    /**
+//     * 内连接
+//     * 默认将两个流的首字段拼接
+//     * @param otherTableList 外表
+//     * @return 流
+//     * */
+//    TableStream<? extends Tuple> innerJoin(TupleList<? extends Tuple> otherTableList);
 
     TableStream<? extends Tuple> leftOuterJoin(TableStream<? extends Tuple> otherTable, int leftKeyIndex, int rightKeyIndex);
 

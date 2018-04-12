@@ -304,6 +304,19 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.innerJoin((TableStream<? extends Tuple>) this,otherTable,predicate);
     }
 
+//    /**
+//     * 内连接
+//     * 默认将两个流的首字段拼接
+//     * @param otherTable 外表
+//     * @return 连接后表
+//     * */
+//    @Override
+//    public TableStream<? extends Tuple> innerJoin(TableStream<? extends Tuple> otherTable){
+//
+//        int firstIdIndex = this.toTupleList().getTupleSize();
+//                //((Optional<Tuple>)this.toTupleList().findFirst()).get().size();
+//        return TableStream.innerJoin((TableStream<? extends Tuple>) this,otherTable,it->Objects.equals(it.get(0),it.get(firstIdIndex+1)));
+//    }
     /**
      * 内连接
      * @param otherTableList 外表
@@ -314,7 +327,17 @@ public class TupleTableStream<T> implements TableStream<T> {
     public TableStream<? extends Tuple> innerJoin(TupleList<? extends Tuple> otherTableList, Predicate<Tuple> predicate){
         return TableStream.innerJoin((TupleList<Tuple>) this.toTupleList(),(TupleList<Tuple>)otherTableList,predicate);
     }
-
+//    /**
+//     * 内连接
+//     * 默认将两个流的首字段拼接
+//     * @param otherTableList 外表
+//     * @return 连接后表
+//     * */
+//    @Override
+//    public TableStream<? extends Tuple> innerJoin(TupleList<? extends Tuple> otherTableList){
+//        int firstIdIndex = this.toTupleList().getTupleSize();
+//        return TableStream.innerJoin((TupleList<Tuple>) this.toTupleList(),(TupleList<Tuple>)otherTableList,it->Objects.equals(it.get(0),it.get(firstIdIndex+1)));
+//    }
     /**
      * 左外连接
      * @param otherTable 外表
