@@ -10,13 +10,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
+
 
 public class TestMath {
     public static TupleList tl;
     @BeforeClass
     public static void setUpBeforeClass() {
         try {
+            //加载数据
             tl = CsvLoader.loadDataToTupleList("src/test/resources/test.csv",",",true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -25,10 +26,10 @@ public class TestMath {
 
     @Test
     public void testZb(){
-        //tl.tableStream().forEach(System.out::println);
+        //聚合数据
+        TableStream tsAgg = tl.tableStream().aggregateMultiColumsByToStream(Arrays.asList(2),Arrays.asList(0));
 
-        TableStream tsAgg = tl.tableStream().aggregateMultiColumsByToStream(Arrays.asList(2),Arrays.asList(0));//.forEach(System.out::println);
-
+        //连接后处理
         tl.tableStream().innerJoin(tsAgg,it->{return Objects.equals(((Tuple)it).get(0),((Tuple)it).get(3));}).select(it->{
 
             List<Object> temps = new ArrayList<>();

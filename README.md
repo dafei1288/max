@@ -141,6 +141,7 @@ tl.tableStream().head(10).forEach(System.out::println);
         //结果：[5,6,7,8,9,10]
 ```
 
+9. [占比计算](https://github.com/dafei1288/max/wiki/%E5%8D%A0%E6%AF%94%E8%AE%A1%E7%AE%97)
 
 # lambda know how
 
