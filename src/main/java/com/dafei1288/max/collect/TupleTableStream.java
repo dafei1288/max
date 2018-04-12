@@ -617,6 +617,22 @@ public class TupleTableStream<T> implements TableStream<T> {
         return aggregateMultiColumsBy(aggIndexs,groupIndexs).entrySet().stream().filter(predicate).collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
     }
 
+    @Override
+    public TableStream<? extends Tuple>  aggregateByToStream(Integer aggColIndex, Integer... groupIndex){
+        return TableStream.load(this.aggregateBy( aggColIndex, groupIndex));
+    }
+
+    @Override
+    public TableStream<? extends Tuple> aggregateMultiColumsByToStream(List<Integer> aggIndexs, List<Integer> groupIndexs){
+        return TableStream.load(this.aggregateMultiColumsBy( aggIndexs, groupIndexs));
+    }
+
+    @Override
+    public TableStream<? extends Tuple> aggregateMultiColumsAndHavingByToStream(List<Integer> aggIndexs, List<Integer> groupIndexs, Predicate<Map.Entry<? extends Tuple, ? extends Tuple>> predicate){
+        return TableStream.load(this.aggregateMultiColumsAndHavingBy( aggIndexs, groupIndexs,predicate));
+    }
+
+
     /**
      * 描述表
      * */

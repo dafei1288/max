@@ -1,5 +1,6 @@
 package com.dafei1288.max.data;
 
+import com.dafei1288.max.collect.TupleList;
 import com.dafei1288.max.collect.Tuples;
 import com.dafei1288.max.collect.tuple.Tuple;
 
@@ -63,10 +64,25 @@ public class SqlLoader implements DataLoader {
                                 }, 0), false);
             }
 
+    public static TupleList<Tuple> loadDataAsTupleList(Connection conn, String sql, final Object...objects) throws SQLException {
+        TupleList<Tuple> tl = new TupleList();
+        try(PreparedStatement ps = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
+            int cnt = 0;
+            for (Object param : objects) {
+                ps.setObject(++cnt, param);
+            }
+            try (ResultSet rs = ps.executeQuery();) {
+                int cc = rs.getMetaData().getColumnCount();
+                while (rs.next()) {
+                    List<Object> row = new ArrayList<>();
+                    for (int i = 1; i <= cc; i++) {
+                        row.add(rs.getObject(i));
+                    }
+                    tl.add(Tuples.tuple(row.toArray()));
+                }
+            }
+        }
 
-
-
-//    public Stream<Tuple> loadDataToStream(){
-//
-//    }
+        return tl;
+    }
 }

@@ -49,6 +49,13 @@ public class TestTupleTableStream {
         tl.tableStream().aggregateBy(2,1).forEach((k,v)->System.out.println("key = "+k+" , value ="+v));
 
     }
+
+    @Test
+    public void testZhanbi(){
+        tl.tableStream().aggregateMultiColumsByToStream(Arrays.asList(2),Arrays.asList(1)).forEach(System.out::println);
+
+    }
+
     @Test
     public void testAggregateMultiColumsAndHavingBy(){
 

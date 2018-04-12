@@ -99,6 +99,17 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
 
     Map<Tuple, Tuple> aggregateMultiColumsAndHavingBy(List<Integer> aggIndexs, List<Integer> groupIndexs, Predicate<Map.Entry<? extends Tuple, ? extends Tuple>> predicate);
 
+
+
+
+    TableStream<? extends Tuple>  aggregateByToStream(Integer aggColIndex, Integer... groupIndex);
+
+    TableStream<? extends Tuple> aggregateMultiColumsByToStream(List<Integer> aggIndexs, List<Integer> groupIndexs);
+
+    TableStream<? extends Tuple> aggregateMultiColumsAndHavingByToStream(List<Integer> aggIndexs, List<Integer> groupIndexs, Predicate<Map.Entry<? extends Tuple, ? extends Tuple>> predicate);
+
+
+
     void discrib();
 
     TableStream<T> subTable(long from, long to);
@@ -220,7 +231,22 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
     }
 
 
-
+    static <K,V> TableStream<? extends Tuple> load(Map<K,V> map){
+        return load(map.entrySet().stream().map(it->{
+            List<Object> temps = new ArrayList<>();
+            if(it.getKey() instanceof Tuple){
+                temps.addAll(((Tuple)it.getKey()).toList());
+            }else{
+                temps.add(it.getKey());
+            }
+            if(it.getValue() instanceof  Tuple){
+                temps.addAll(((Tuple)it.getValue()).toList());
+            }else{
+                temps.add(it.getValue());
+            }
+            return Tuples.tuple(temps.toArray());
+        }).collect(Collectors.toList()));
+    }
 
     static TableStream<? extends Tuple> crossJoin(TableStream<? extends Tuple> leftTable, TableStream<? extends Tuple> rightTable) {
         List<? extends Tuple> right = rightTable.collect(Collectors.toList());
