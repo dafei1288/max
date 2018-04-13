@@ -12,7 +12,7 @@
 
 `RELEASE`:
 
-> doing 
+> compile 'com.dafei1288:max:0.0.1-alpha'
 
 # something new
 
@@ -190,4 +190,4 @@ tl.tableStream().head(10).forEach(System.out::println);
 
 1. [github](https://github.com/dafei1288/max)
 
-(update@2018/4/8)
+(update@2018/4/13)

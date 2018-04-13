@@ -72,7 +72,7 @@ public class TestTupleTableStream {
         rightList.add(Tuples.tuple("1","活"));
         TableStream rightTable = rightList.tableStream();
 
-        tl.tableStream().innerJoin(rightTable,it->{return Objects.equals(((Tuple)it).get(1),((Tuple)it).get(13));}).forEach(System.out::println);
+        tl.tableStream().innerJoin(rightTable,it->{return Objects.equals(((Tuple)it).get(1),((Tuple)it).get(4));}).forEach(System.out::println);
     }
 
     @Test
