@@ -1,6 +1,8 @@
 package com.dafei1288.max.collect.tuple;
 
 import com.dafei1288.max.collect.Tuples;
+import com.dafei1288.max.lambda.function.Functions;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.Serializable;
@@ -344,6 +346,9 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
      * */
     public abstract <E> Tuple addElement(E e);
 
+    public <R> Tuple addElementByFunction(Function<Tuple,R> function){
+        return addElement(function.apply(this));
+    }
 
 //    public static <T, A1, D1> Collector<T, Tuple1<A1>, Tuple1<D1>> collectors(
 //            Collector<? super T, A1, D1> collector1
@@ -448,4 +453,5 @@ public abstract class Tuple implements Iterable<Object>, Serializable {
                 )
         );
     }
+
 }

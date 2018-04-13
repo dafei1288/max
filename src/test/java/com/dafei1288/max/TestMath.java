@@ -41,4 +41,9 @@ public class TestMath {
         }).forEach(System.out::println);
     }
 
+    @Test
+    public  void testAddItemByFunction(){
+        tl.tableStream().addCalculateItem(it->{return ((Tuple)it).getInteger(0)+ ((Tuple)it).getInteger(1);}).forEach(System.out::println);
+    }
+
 }

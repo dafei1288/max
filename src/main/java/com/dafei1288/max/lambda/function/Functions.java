@@ -10,6 +10,8 @@ public interface Functions {
     Function<String,String> UPPER_CASE_FUNCTOR = (x) -> x.toUpperCase();
     Function<String,String> LOWER_CASE_FUNCTOR = (x) -> x.toLowerCase();
 
+    Function MYSELF = (x) -> x;
+
     BiFunction PLUS = (k,v)->{
         if(k==null && v==null){
             return null;
@@ -42,6 +44,7 @@ public interface Functions {
         Function<Double,Double> LOG = (x) -> Math.log(x);
 
     }
+
 
 
 }

@@ -382,7 +382,14 @@ public class TupleTableStream<T> implements TableStream<T> {
         return TableStream.load(st);
     }
 
-
+    @Override
+    public <R> TableStream<? extends Tuple> addCalculateItem(Function<Tuple, R> function){
+        return TableStream.load(
+                this.stream.map(it->{
+                    return ((Tuple)it).addElementByFunction(function);
+                })
+        );
+    }
 
 
     /**

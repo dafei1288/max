@@ -70,6 +70,8 @@ public interface TableStream<T> extends Stream<T>, Iterable<T> {
 
     TableStream<? extends Tuple> union(TableStream<? extends Tuple> otherTable);
 
+    <R> TableStream<? extends Tuple> addCalculateItem(Function<Tuple, R> function);
+
     <E> TableStream<T> in(int index, Collection<E> values);
 
     <E> TableStream<T> inRow(E value);
