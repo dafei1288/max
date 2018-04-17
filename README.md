@@ -4,13 +4,13 @@
 
 > 那么为什么叫max？ 因为最近越发的喜欢《破产姐妹》里面的max了。
 
-# coordinate
-`SNAPSHOT`:[![Build Status](https://travis-ci.org/dafei1288/max.svg?branch=master)](https://travis-ci.org/dafei1288/max)
+# coordinate [![Build Status](https://travis-ci.org/dafei1288/max.svg?branch=master)](https://travis-ci.org/dafei1288/max)
+`SNAPSHOT`:
 > https://oss.sonatype.org/content/groups/public
 
 > compile 'com.dafei1288:max:1.0-SNAPSHOT'
 
-`RELEASE`:[![Build Status](https://travis-ci.org/dafei1288/max.svg?branch=master)](https://travis-ci.org/dafei1288/max)
+`RELEASE`:
 
 > compile 'com.dafei1288:max:0.0.1-alpha'
 
