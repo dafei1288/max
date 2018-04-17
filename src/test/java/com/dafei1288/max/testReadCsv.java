@@ -147,7 +147,7 @@ public class testReadCsv {
         }
     }
 
-    @Test
+
     public void testLoadBigData1(){
         try {
             long start = System.currentTimeMillis();
@@ -159,7 +159,7 @@ public class testReadCsv {
         }
     }
 
-    @Test
+
     public void testFunction(){
         try {
             CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false).map(it-> it.getDouble(6)).map(Functions.MathFunc.COS).forEach(System.out::println);
@@ -168,7 +168,7 @@ public class testReadCsv {
         }
     }
 
-    @Test
+
     public void testHeadAndTail(){
         try {
 
@@ -183,7 +183,7 @@ public class testReadCsv {
         }
     }
 
-    @Test
+
     public void testWordCount(){
         try {
             CsvLoader.loadDataToTableStream("C:\\Users\\dafei\\Desktop\\rb.csv",",",false)

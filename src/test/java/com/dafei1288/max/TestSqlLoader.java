@@ -31,7 +31,7 @@ public class TestSqlLoader {
     @Test
     public void testLoadData(){
         try {
-            SqlLoader.loadData(conn,"SELECT t.* FROM air.facttable t LIMIT 501").forEach(System.out::println);
+            //SqlLoader.loadData(conn,"SELECT t.* FROM air.facttable t LIMIT 501").forEach(System.out::println);
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
