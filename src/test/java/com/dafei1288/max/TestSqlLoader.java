@@ -17,24 +17,24 @@ public class TestSqlLoader {
         String username = "root";
         String password = "1";
         conn = null;
-        try {
-            Class.forName(driver); //classLoader,加载对应驱动
-            conn = DriverManager.getConnection(url, username, password);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Class.forName(driver); //classLoader,加载对应驱动
+//            conn = DriverManager.getConnection(url, username, password);
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         //return conn;
     }
 
     @Test
     public void testLoadData(){
-        try {
-            //SqlLoader.loadData(conn,"SELECT t.* FROM air.facttable t LIMIT 501").forEach(System.out::println);
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            SqlLoader.loadData(conn,"SELECT t.* FROM air.facttable t LIMIT 501").forEach(System.out::println);
+//            conn.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 }
